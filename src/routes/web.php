@@ -14,5 +14,22 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('index');
+});
+
+Route::post('/', function () {
+    return view('index');
+});
+
+
+Route::get('/detail', function () {
+    return view('detail');
+});
+
+Route::post('/edit-profile', function () {
+    return view('edit-profile');
+});
+
+Route::post('/profile', function () {
+    return view('profile');
 });
