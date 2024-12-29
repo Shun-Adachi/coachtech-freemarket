@@ -29,8 +29,8 @@
 
 @section('content')
 <div class="item-header">
-  <a class="item-header__link--recomend" href="/">おすすめ</a>
-  <a class="item-header__link--favorite" href="/">マイリスト</a>
+  <a class="item-header__link" href="/">おすすめ</a>
+  <a class="item-header__link--active" href="/">マイリスト</a>
 </div>
 
 <div class="item-list">

@@ -22,14 +22,28 @@ Route::post('/', function () {
 });
 
 
-Route::get('/detail', function () {
-    return view('detail');
+Route::get('/item', function () {
+    return view('item');
+});
+
+Route::get('/edit-profile', function () {
+    return view('edit-profile');
 });
 
 Route::post('/edit-profile', function () {
     return view('edit-profile');
 });
 
-Route::post('/profile', function () {
-    return view('profile');
+
+Route::get('/mypage', function () {
+    return view('mypage');
+});
+
+Route::post('/mypage', function () {
+    return view('mypage');
+});
+
+
+Route::get('/sell', function () {
+    return view('sell');
 });

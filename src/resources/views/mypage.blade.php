@@ -3,7 +3,7 @@
 @section('css')
 <link rel="stylesheet" href="{{ asset('css/common/user-common.css')}}">
 <link rel="stylesheet" href="{{ asset('css/common/item-common.css')}}">
-<link rel="stylesheet" href="{{ asset('css/profile.css')}}">
+<link rel="stylesheet" href="{{ asset('css/mypage.css')}}">
 @endsection
 
 @section('search')
@@ -29,23 +29,21 @@
 @endsection
 
 @section('content')
-<div class="user-infomation">
-  <form class="profile-image-form__form" action="/profile/upload" method="post">
-    @csrf
-    <div class="profile-image-form__group">
-      <img
-        class="profile-image-form__image"
-        src="{{ $profileImage ?? 'images/default-profile.png'}}"
-        alt="プロフィール画像">
-      <label class="profile-image-form__label" type="submit">ユーザー名</label>
-      <input class="profile-image-form__button" type="submit" value="プロフィールを編集">
-    </div>
-  </form>
-</div>
+<form class="profile-image-form__form" action="/edot-profile" method="post">
+  @csrf
+  <div class="profile-image-form__group">
+    <img
+      class="profile-image-form__image"
+      src="{{ $profileImage ?? 'images/default-profile.png'}}"
+      alt="プロフィール画像">
+    <p class="profile-image-form__label" type="submit">ユーザー名</p>
+    <input class="profile-image-form__button" type="submit" value="プロフィールを編集">
+  </div>
+</form>
 
 <div class="item-header">
-  <a class="item-header__link--recomend" href="/">おすすめ</a>
-  <a class="item-header__link--favorite" href="/">マイリスト</a>
+  <a class="item-header__link" href="/mypage">出品した商品</a>
+  <a class="item-header__link--active" href="/mypage">購入した商品</a>
 </div>
 
 <div class="item-list">

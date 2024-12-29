@@ -6,7 +6,7 @@
   border-bottom: 1px #a0a0a0 solid
 }
 
-.item-header__link--recomend {
+.item-header__link {
   margin: auto 5px;
   padding: 0 20px;
   text-decoration: none;
@@ -15,7 +15,7 @@
   color: #000000;
 }
 
-.item-header__link--favorite {
+.item-header__link--active {
   margin: auto 5px;
   padding: 0 20px;
   text-decoration: none;
