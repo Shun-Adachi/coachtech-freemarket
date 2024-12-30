@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use Laravel\Fortify\Fortify;
+use App\Http\Requests\CustomLoginRequest;
 
 class FortifyServiceProvider extends ServiceProvider
 {
@@ -43,5 +44,24 @@ class FortifyServiceProvider extends ServiceProvider
 
             return Limit::perMinute(10)->by($email . $request->ip());
         });
+
+
+        // 会員登録ページにリダイレクト
+        $this->app->singleton(\Laravel\Fortify\Contracts\RegisterResponse::class, function ($app) {
+            return new class implements \Laravel\Fortify\Contracts\RegisterResponse {
+                public function toResponse($request)
+                {
+                    \Log::info('RegisterResponse triggered');
+                    \Log::info('User authenticated: ' . (auth()->check() ? 'yes' : 'no'));
+                    return redirect('/mypage/profile'); // 登録後にリダイレクトするページ
+                }
+            };
+        });
+
+        // LoginRequestをカスタムクラスに置き換える
+        $this->app->bind(
+            \Laravel\Fortify\Http\Requests\LoginRequest::class,
+            CustomLoginRequest::class
+        );
     }
 }

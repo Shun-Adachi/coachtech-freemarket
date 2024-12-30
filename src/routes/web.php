@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\ItemController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -61,7 +63,16 @@ Route::post('/purchase', function () {
     return view('purchase');
 });
 
-
 Route::get('/purchase/address', function () {
     return view('edit-address');
 });
+
+Route::middleware('auth')->group(function () {
+    Route::get('/', [ItemController::class, 'index']);
+    Route::get('/mypage/profile', [UserController::class, 'edit_profile']);
+});
+
+Route::post('/logout', function () {
+    Auth::logout();
+    return redirect('/login'); // カスタムリダイレクト先
+})->name('logout');

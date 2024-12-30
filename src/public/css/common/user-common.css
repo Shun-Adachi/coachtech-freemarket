@@ -82,3 +82,9 @@
   font-size: large;
   font-weight: bold;
 }
+
+.user-form__error-message {
+  height: 0px;
+  margin: 0;
+  color: #f05454;
+}

@@ -8,15 +8,25 @@
 @section('content')
 <div class="user-form">
   <h2 class="user-form__heading">ログイン</h2>
-  <form class="user-form__form" action="/edit-profile" method="post">
+  <form class="user-form__form" action="/login" method="post">
     @csrf
     <div class="user-form__group">
       <label class="user-form__label" for="name">ユーザー名 / メールアドレス</label>
-      <input class="user-form__input" type="text" name="name" id="name">
+      <input class="user-form__input" type="text" name="email" id="name">
+      <p class="user-form__error-message">
+        @error('email')
+        {{ $message }}
+        @enderror
+      </p>
     </div>
     <div class="user-form__group">
       <label class="user-form__label" for="password">パスワード</label>
       <input class="user-form__input" type="password" name="password" id="password">
+      <p class="user-form__error-message">
+        @error('password')
+        {{ $message }}
+        @enderror
+      </p>
     </div>
     <div class="user-form__group">
       <input class="user-form__button" type="submit" value="ログインする">

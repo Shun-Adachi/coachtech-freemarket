@@ -1,5 +1,5 @@
 @section('link')
-<form action="/login" method="post">
+<form action="/logout" method="post">
   @csrf
   <input class="header-link__link" type="submit" value="ログアウト">
 </form>
