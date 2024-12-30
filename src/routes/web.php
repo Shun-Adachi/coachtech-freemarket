@@ -26,11 +26,11 @@ Route::get('/item', function () {
     return view('item');
 });
 
-Route::get('/edit-profile', function () {
+Route::get('/mypage/profile', function () {
     return view('edit-profile');
 });
 
-Route::post('/edit-profile', function () {
+Route::post('/mypage/profile', function () {
     return view('edit-profile');
 });
 
@@ -46,4 +46,22 @@ Route::post('/mypage', function () {
 
 Route::get('/sell', function () {
     return view('sell');
+});
+
+Route::get('/purchase', function () {
+    return view('purchase');
+});
+
+
+Route::get('/purchase', function () {
+    return view('purchase');
+});
+
+Route::post('/purchase', function () {
+    return view('purchase');
+});
+
+
+Route::get('/purchase/address', function () {
+    return view('edit-address');
 });

@@ -14,7 +14,7 @@
 <body>
   <div class="app">
     <header class="header">
-      <img class="header-logo" src="images/logo.svg" />
+      <img class="header-logo" src="/images/logo.svg" />
       <div class="header-search">
         @yield('search')
       </div>

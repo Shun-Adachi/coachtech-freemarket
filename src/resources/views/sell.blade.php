@@ -1,29 +1,9 @@
 @extends('layouts.app')
+@extends('layouts.search')
+@extends('layouts.link')
 
 @section('css')
 <link rel="stylesheet" href="{{ asset('css/sell.css')}}">
-@endsection
-
-@section('search')
-<form class="header-search-form__form" action="/" method="post">
-  @csrf
-  <input class="header-search-form__input" type="text" placeholder="なにをお探しですか？" name="search">
-</form>
-@endsection
-
-@section('link')
-<form action="/login" method="post">
-  @csrf
-  <input class="header-link__link" type="submit" value="ログアウト">
-</form>
-<form action="/profile" method="post">
-  @csrf
-  <input class="header-link__link" type="submit" value="マイページ">
-</form>
-<form action="/sell" method="post">
-  @csrf
-  <input class="header-link__link--sell" type="submit" value="出品">
-</form>
 @endsection
 
 @section('content')
@@ -37,7 +17,7 @@
       <div class="sell-form__image-upload-container">
         <button type="button" class="sell-form__file-upload-button">画像を選択する</button>
         <input type="file" class="sell-form__hidden-file-input" accept="image/*">
-        <img src="" alt="" class="sell-form__image-preview">
+        <img class="sell-form__image-preview" src="">
       </div>
     </div>
     <!-- 商品の詳細 -->

@@ -1,4 +1,6 @@
 @extends('layouts.app')
+@extends('layouts.search')
+@extends('layouts.link')
 
 @section('css')
 <link rel="stylesheet" href="{{ asset('css/common/user-common.css')}}">
@@ -6,30 +8,9 @@
 <link rel="stylesheet" href="{{ asset('css/mypage.css')}}">
 @endsection
 
-@section('search')
-<form class="header-search-form__form" action="/" method="post">
-  @csrf
-  <input class="header-search-form__input" type="text" placeholder="なにをお探しですか？" name="search">
-</form>
-@endsection
-
-@section('link')
-<form action="/login" method="post">
-  @csrf
-  <input class="header-link__link" type="submit" value="ログアウト">
-</form>
-<form action="/profile" method="post">
-  @csrf
-  <input class="header-link__link" type="submit" value="マイページ">
-</form>
-<form action="/sell" method="post">
-  @csrf
-  <input class="header-link__link--sell" type="submit" value="出品">
-</form>
-@endsection
-
 @section('content')
-<form class="profile-image-form__form" action="/edot-profile" method="post">
+<!-- ユーザー情報 -->
+<form class="profile-image-form__form" action="/edit-profile" method="post">
   @csrf
   <div class="profile-image-form__group">
     <img
@@ -40,12 +21,12 @@
     <input class="profile-image-form__button" type="submit" value="プロフィールを編集">
   </div>
 </form>
-
+<!-- ヘッダータブ -->
 <div class="item-header">
   <a class="item-header__link" href="/mypage">出品した商品</a>
   <a class="item-header__link--active" href="/mypage">購入した商品</a>
 </div>
-
+<!-- アイテムリスト -->
 <div class="item-list">
   @for ($i = 0; $i < 5; $i++)
     <div class="item-card">
