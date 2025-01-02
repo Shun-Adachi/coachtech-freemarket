@@ -18,8 +18,9 @@ class ItemsTableSeeder extends Seeder
             'name' => '腕時計',
             'price' => '15000',
             'description' => 'スタイリッシュなデザインのメンズ腕時計',
+            'user_id' => '1',
             'condition_id' => '1',
-            'image_path' => '/images/Armani+Mens+Clock.jpg',
+            'image_path' => '/default/Armani+Mens+Clock.jpg',
         ];
         DB::table('items')->insert($param);
 
@@ -27,8 +28,9 @@ class ItemsTableSeeder extends Seeder
             'name' => 'HDD',
             'price' => '5000',
             'description' => '高速で信頼性の高いハードディスク',
+            'user_id' => '1',
             'condition_id' => '2',
-            'image_path' => '/images/HDD+Hard+Disk.jpg',
+            'image_path' => '/default/HDD+Hard+Disk.jpg',
         ];
         DB::table('items')->insert($param);
 
@@ -36,8 +38,9 @@ class ItemsTableSeeder extends Seeder
             'name' => '玉ねぎ3束',
             'price' => '300',
             'description' => '新鮮な玉ねぎ3束のセット',
+            'user_id' => '1',
             'condition_id' => '3',
-            'image_path' => '/images/iLoveIMG+d.jpg',
+            'image_path' => '/default/iLoveIMG+d.jpg',
         ];
         DB::table('items')->insert($param);
 
@@ -45,8 +48,9 @@ class ItemsTableSeeder extends Seeder
             'name' => '革靴',
             'price' => '4000',
             'description' => 'クラシックなデザインの革靴',
+            'user_id' => '1',
             'condition_id' => '4',
-            'image_path' => '/images/Leather+Shoes+Product+Photo.jpg',
+            'image_path' => '/default/Leather+Shoes+Product+Photo.jpg',
         ];
         DB::table('items')->insert($param);
 
@@ -54,8 +58,9 @@ class ItemsTableSeeder extends Seeder
             'name' => 'ノートPC',
             'price' => '45000',
             'description' => '高性能なノートパソコン',
+            'user_id' => '1',
             'condition_id' => '1',
-            'image_path' => '/images/Living+Room+Laptop.jpg',
+            'image_path' => '/default/Living+Room+Laptop.jpg',
         ];
         DB::table('items')->insert($param);
 
@@ -63,8 +68,9 @@ class ItemsTableSeeder extends Seeder
             'name' => 'マイク',
             'price' => '8000',
             'description' => '高音質のレコーディング用マイク',
+            'user_id' => '1',
             'condition_id' => '2',
-            'image_path' => '/images/Music+Mic+4632231.jpg',
+            'image_path' => '/default/Music+Mic+4632231.jpg',
         ];
         DB::table('items')->insert($param);
 
@@ -72,8 +78,9 @@ class ItemsTableSeeder extends Seeder
             'name' => 'ショルダーバッグ',
             'price' => '3500',
             'description' => 'おしゃれなショルダーバッグ',
+            'user_id' => '1',
             'condition_id' => '3',
-            'image_path' => '/images/Purse+fashion+pocket.jpg',
+            'image_path' => '/default/Purse+fashion+pocket.jpg',
         ];
         DB::table('items')->insert($param);
 
@@ -81,8 +88,9 @@ class ItemsTableSeeder extends Seeder
             'name' => 'タンブラー',
             'price' => '500',
             'description' => '使いやすいタンブラー',
+            'user_id' => '1',
             'condition_id' => '4',
-            'image_path' => '/images/Tumbler+souvenir.jpg',
+            'image_path' => '/default/Tumbler+souvenir.jpg',
         ];
         DB::table('items')->insert($param);
 
@@ -90,8 +98,9 @@ class ItemsTableSeeder extends Seeder
             'name' => 'コーヒーミル',
             'price' => '4000',
             'description' => '手動のコーヒーミル',
+            'user_id' => '1',
             'condition_id' => '1',
-            'image_path' => '/images/Waitress+with+Coffee+Grinder.jpg',
+            'image_path' => '/default/Waitress+with+Coffee+Grinder.jpg',
         ];
         DB::table('items')->insert($param);
 
@@ -99,8 +108,9 @@ class ItemsTableSeeder extends Seeder
             'name' => 'メイクセット',
             'price' => '2500',
             'description' => '便利なメイクアップセット',
+            'user_id' => '1',
             'condition_id' => '2',
-            'image_path' => '/images/外出メイクアップセット.jpg',
+            'image_path' => '/default/外出メイクアップセット.jpg',
         ];
         DB::table('items')->insert($param);
     }

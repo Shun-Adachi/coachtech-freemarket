@@ -49,11 +49,7 @@
   text-decoration: none;
 }
 
-.user-infomation {}
-
-.profile-image-form__form {}
-
-.profile-image-form__group {
+.user-form__image-group {
   display: flex;
   align-items: center;
   width: 100%;
@@ -61,26 +57,25 @@
   margin: 20px auto;
 }
 
-.profile-image-form__image {
+.user-form__image-preview {
   width: 150px;
   height: 150px;
   margin: 20px;
   border-radius: 50%;
 }
 
-.profile-image-form__button {
+.user-form__file-upload-button {
   padding: 5px 10px;
   background-color: #ffffff;
-  border-color: #f05454;
+  border: 2px #ff5454 solid;
   border-radius: 5px;
   color: #f05454;
   font-size: large;
+  cursor: pointer;
 }
 
-.profile-image-form__label {
-  margin: 0px 180px 0px 0px;
-  font-size: large;
-  font-weight: bold;
+.user-form__hidden-file-input {
+  display: none;
 }
 
 .user-form__error-message {

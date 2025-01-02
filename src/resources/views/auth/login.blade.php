@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('css')
-<link rel="stylesheet" href="{{ asset('css/common/user-common.css')}}">
+<link rel="stylesheet" href="{{ asset('css/common/user-form.css')}}">
 <link rel="stylesheet" href="{{ asset('css/auth/login.css')}}">
 @endsection
 
@@ -11,8 +11,8 @@
   <form class="user-form__form" action="/login" method="post">
     @csrf
     <div class="user-form__group">
-      <label class="user-form__label" for="name">ユーザー名 / メールアドレス</label>
-      <input class="user-form__input" type="text" name="email" id="name">
+      <label class="user-form__label" for="email">ユーザー名 / メールアドレス</label>
+      <input class="user-form__input" type="email" name="email" id="email" value="{{ old('email') }}">
       <p class="user-form__error-message">
         @error('email')
         {{ $message }}

@@ -1,0 +1,31 @@
+.mypage-form__form {}
+
+.mypage-form__group {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 800px;
+  margin: 20px auto;
+}
+
+.mypage-form__image {
+  width: 150px;
+  height: 150px;
+  margin: 20px;
+  border-radius: 50%;
+}
+
+.mypage-form__button {
+  padding: 5px 10px;
+  background-color: #ffffff;
+  border-color: #f05454;
+  border-radius: 5px;
+  color: #f05454;
+  font-size: large;
+}
+
+.mypage-form__label {
+  margin: 0px 180px 0px 0px;
+  font-size: large;
+  font-weight: bold;
+}

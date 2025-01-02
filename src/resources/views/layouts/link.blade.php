@@ -1,4 +1,6 @@
 @section('link')
+
+@if(auth()->check())
 <form action="/logout" method="post">
   @csrf
   <input class="header-link__link" type="submit" value="ログアウト">
@@ -11,4 +13,11 @@
   @csrf
   <input class="header-link__link--sell" type="submit" value="出品">
 </form>
+@else
+<form action="/login" method="get">
+  @csrf
+  <input class="header-link__link" type="submit" value="ログイン">
+</form>
+@endif
+
 @endsection

@@ -46,13 +46,7 @@ class CategoryItemTableSeeder extends Seeder
 
         $param = [
             'item_id' => '4',
-            'category_id' => '3',
-        ];
-        DB::table('category_item')->insert($param);
-
-        $param = [
-            'item_id' => '5',
-            'category_id' => '2',
+            'category_id' => '5',
         ];
         DB::table('category_item')->insert($param);
 

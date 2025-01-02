@@ -15,4 +15,17 @@ class Item extends Model
         'condition_id',
         'image_path',
     ];
+
+    //ItemとConditionのリレーション
+    public function Condition()
+    {
+        return $this->belongsTo(Condition::class);
+    }
+
+    //ItemとUserのリレーション
+    public function User()
+    {
+        return $this->belongsTo(User::class);
+    }
+
 }

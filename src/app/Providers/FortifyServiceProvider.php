@@ -12,18 +12,10 @@ use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use Laravel\Fortify\Fortify;
-use App\Http\Requests\CustomLoginRequest;
+use App\Http\Requests\LoginRequest;
 
 class FortifyServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     */
-    public function register(): void
-    {
-        //
-    }
-
     /**
      * Bootstrap any application services.
      */
@@ -51,9 +43,7 @@ class FortifyServiceProvider extends ServiceProvider
             return new class implements \Laravel\Fortify\Contracts\RegisterResponse {
                 public function toResponse($request)
                 {
-                    \Log::info('RegisterResponse triggered');
-                    \Log::info('User authenticated: ' . (auth()->check() ? 'yes' : 'no'));
-                    return redirect('/mypage/profile'); // 登録後にリダイレクトするページ
+                    return redirect('/mypage/profile');
                 }
             };
         });
@@ -61,7 +51,7 @@ class FortifyServiceProvider extends ServiceProvider
         // LoginRequestをカスタムクラスに置き換える
         $this->app->bind(
             \Laravel\Fortify\Http\Requests\LoginRequest::class,
-            CustomLoginRequest::class
+            LoginRequest::class
         );
     }
 }

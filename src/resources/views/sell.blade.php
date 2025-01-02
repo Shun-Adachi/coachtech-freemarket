@@ -15,8 +15,8 @@
     <div class="sell-form__group">
       <label class="sell-form__label" for="item-image">商品画像</label>
       <div class="sell-form__image-upload-container">
-        <button type="button" class="sell-form__file-upload-button">画像を選択する</button>
-        <input type="file" class="sell-form__hidden-file-input" accept="image/*">
+        <button class="sell-form__file-upload-button" type="button">画像を選択する</button>
+        <input class="sell-form__hidden-file-input" type="file" accept="image/*">
         <img class="sell-form__image-preview" src="">
       </div>
     </div>

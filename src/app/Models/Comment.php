@@ -13,4 +13,10 @@ class Comment extends Model
         'user_id',
         'item_id',
     ];
+
+    //CommentとUserのリレーション
+    public function User()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

@@ -20,11 +20,13 @@ input[type="submit"] {
   background-color: #000;
 }
 
-.header-logo {
+.header-logo__link {
   width: 25%;
   max-width: 200px;
   margin: auto 10px;
 }
+
+.header-logo__image {}
 
 .header-search {
   width: 25%;
@@ -77,3 +79,12 @@ input[type="submit"] {
 }
 
 .content {}
+
+.alert__message {
+  width: 100%;
+  padding: 5px 15px;
+  font-weight: bold;
+  color: #0f5132;
+  background: #d1e7dd;
+  border-color: #badbcc;
+}

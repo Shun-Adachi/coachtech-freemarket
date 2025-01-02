@@ -3,7 +3,7 @@
 @extends('layouts.link')
 
 @section('css')
-<link rel="stylesheet" href="{{ asset('css/common/user-common.css')}}">
+<link rel="stylesheet" href="{{ asset('css/common/user-form.css')}}">
 <link rel="stylesheet" href="{{ asset('css/auth/edit-address.css')}}">
 @endsection
 

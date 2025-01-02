@@ -3,27 +3,29 @@
 @extends('layouts.link')
 
 @section('css')
-<link rel="stylesheet" href="{{ asset('css/common/item-common.css')}}">
+<link rel="stylesheet" href="{{ asset('css/common/item-list.css')}}">
 <link rel="stylesheet" href="{{ asset('css/index.css')}}">
 @endsection
 
 @section('content')
-<!-- ヘッダータブ -->
-<div class="item-header">
-  <a class="item-header__link" href="/">おすすめ</a>
-  <a class="item-header__link--active" href="/">マイリスト</a>
+<!-- アイテムタブ -->
+<div class="item-tab">
+  <a class="item-tab__link" href="/">おすすめ</a>
+  @if(auth()->check())
+  <a class="item-tab__link--active" href="/?tab=mylist">マイリスト</a>
+  @endif
 </div>
 
 <!-- アイテムリスト -->
 <div class="item-list">
-  @for ($i = 0; $i < 5; $i++)
-    <div class="item-card">
-    <a class="item-card__link" href=" /detail">
-      <img class="item-card__image" src="./images/default-profile.png" />
+  @foreach ($items as $item)
+  <div class="item-card">
+    <a class="item-card__link" href="{{'/item/' . $item->id}}">
+      <img class="item-card__image" src="{{asset('storage/' . $item->image_path)}}" />
     </a>
-    <p class="item-card__label">商品名</p>
-</div>
-@endfor
+    <p class="item-card__label">{{$item->name}}</p>
+  </div>
+  @endforeach
 </div>
 
 </div>

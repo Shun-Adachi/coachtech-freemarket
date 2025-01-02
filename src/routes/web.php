@@ -15,27 +15,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('index');
+Route::prefix('/')->group(function () {
+    Route::get('/', [ItemController::class, 'index']);
+    Route::get('/item/{item_id}', [ItemController::class, 'show']);
 });
-
-Route::post('/', function () {
-    return view('index');
-});
-
 
 Route::get('/item', function () {
     return view('item');
 });
-
-Route::get('/mypage/profile', function () {
-    return view('edit-profile');
-});
-
-Route::post('/mypage/profile', function () {
-    return view('edit-profile');
-});
-
 
 Route::get('/mypage', function () {
     return view('mypage');
@@ -68,11 +55,11 @@ Route::get('/purchase/address', function () {
 });
 
 Route::middleware('auth')->group(function () {
-    Route::get('/', [ItemController::class, 'index']);
-    Route::get('/mypage/profile', [UserController::class, 'edit_profile']);
+    Route::get('/mypage/profile', [UserController::class, 'edit']);
+    Route::post('/mypage/profile/update', [UserController::class, 'update']);
 });
 
 Route::post('/logout', function () {
     Auth::logout();
-    return redirect('/login'); // カスタムリダイレクト先
+    return redirect('/'); // カスタムリダイレクト先
 })->name('logout');

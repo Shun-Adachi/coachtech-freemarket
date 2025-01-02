@@ -3,28 +3,27 @@
 @extends('layouts.link')
 
 @section('css')
-<link rel="stylesheet" href="{{ asset('css/common/user-common.css')}}">
-<link rel="stylesheet" href="{{ asset('css/common/item-common.css')}}">
+<link rel="stylesheet" href="{{ asset('css/common/item-list.css')}}">
 <link rel="stylesheet" href="{{ asset('css/mypage.css')}}">
 @endsection
 
 @section('content')
 <!-- ユーザー情報 -->
-<form class="profile-image-form__form" action="/edit-profile" method="post">
+<form class="mypage-form__form" action="/mypage/profile" method="get">
   @csrf
-  <div class="profile-image-form__group">
+  <div class="mypage-form__group">
     <img
-      class="profile-image-form__image"
+      class="mypage-form__image"
       src="{{ $profileImage ?? 'images/default-profile.png'}}"
       alt="プロフィール画像">
-    <p class="profile-image-form__label" type="submit">ユーザー名</p>
-    <input class="profile-image-form__button" type="submit" value="プロフィールを編集">
+    <p class="mypage-form__label" type="submit">ユーザー名</p>
+    <input class="mypage-form__button" type="submit" value="プロフィールを編集">
   </div>
 </form>
-<!-- ヘッダータブ -->
-<div class="item-header">
-  <a class="item-header__link" href="/mypage">出品した商品</a>
-  <a class="item-header__link--active" href="/mypage">購入した商品</a>
+<!-- アイテムタブ -->
+<div class="item-tab">
+  <a class="item-tab__link" href="/mypage">出品した商品</a>
+  <a class="item-tab__link--active" href="/mypage">購入した商品</a>
 </div>
 <!-- アイテムリスト -->
 <div class="item-list">

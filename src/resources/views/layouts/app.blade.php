@@ -7,14 +7,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Coachtech-free-market</title>
   <link rel="stylesheet" href="{{ asset('css/common/sanitize.css') }}" />
-  <link rel="stylesheet" href="{{ asset('css/common/common.css')}}">
+  <link rel="stylesheet" href="{{ asset('css/common/header.css')}}">
   @yield('css')
 </head>
 
 <body>
   <div class="app">
     <header class="header">
-      <img class="header-logo" src="/images/logo.svg" />
+      <a class="header-logo__link" href="/">
+        <img class="header-logo__image" src=" /images/logo.svg" />
+      </a>
       <div class="header-search">
         @yield('search')
       </div>
@@ -23,6 +25,11 @@
       </div>
     </header>
     <div class="content">
+      @if (session('message'))
+      <div class="alert__message">
+        {{session('message')}}
+      </div>
+      @endif
       @yield('content')
     </div>
   </div>
