@@ -10,10 +10,8 @@
 @section('content')
 <!-- アイテムタブ -->
 <div class="item-tab">
-  <a class="item-tab__link" href="/">おすすめ</a>
-  @if(auth()->check())
-  <a class="item-tab__link--active" href="/?tab=mylist">マイリスト</a>
-  @endif
+  <a class="{{$tab === 'mylist' ? 'item-tab__link' : 'item-tab__link--active'}}" href="/">おすすめ</a>
+  <a class="{{$tab === 'mylist' ? 'item-tab__link--active' : 'item-tab__link'}}" href="/?tab=mylist">マイリスト</a>
 </div>
 
 <!-- アイテムリスト -->

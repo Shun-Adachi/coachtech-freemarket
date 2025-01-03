@@ -20,28 +20,6 @@ Route::prefix('/')->group(function () {
     Route::get('/item/{item_id}', [ItemController::class, 'show']);
 });
 
-Route::get('/item', function () {
-    return view('item');
-});
-
-Route::get('/mypage', function () {
-    return view('mypage');
-});
-
-Route::post('/mypage', function () {
-    return view('mypage');
-});
-
-
-Route::get('/sell', function () {
-    return view('sell');
-});
-
-Route::get('/purchase', function () {
-    return view('purchase');
-});
-
-
 Route::get('/purchase', function () {
     return view('purchase');
 });
@@ -55,11 +33,16 @@ Route::get('/purchase/address', function () {
 });
 
 Route::middleware('auth')->group(function () {
+    Route::get('/item/favorite/{item_id}', [ItemController::class, 'favorite']);
+    Route::post('/item/comment', [ItemController::class, 'comment']);
+    Route::get('/sell', [ItemController::class, 'sell']);
+    Route::post('/sell/create', [ItemController::class, 'store']);
+    Route::get('/mypage', [UserController::class, 'index']);
     Route::get('/mypage/profile', [UserController::class, 'edit']);
     Route::post('/mypage/profile/update', [UserController::class, 'update']);
 });
 
-Route::post('/logout', function () {
+Route::get('/logout', function () {
     Auth::logout();
-    return redirect('/'); // カスタムリダイレクト先
+    return redirect('/')->with('message', 'ログアウトしました'); // カスタムリダイレクト先
 })->name('logout');

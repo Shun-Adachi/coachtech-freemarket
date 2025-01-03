@@ -9,32 +9,32 @@
 
 @section('content')
 <!-- ユーザー情報 -->
-<form class="mypage-form__form" action="/mypage/profile" method="get">
-  @csrf
-  <div class="mypage-form__group">
-    <img
-      class="mypage-form__image"
-      src="{{ $profileImage ?? 'images/default-profile.png'}}"
-      alt="プロフィール画像">
-    <p class="mypage-form__label" type="submit">ユーザー名</p>
-    <input class="mypage-form__button" type="submit" value="プロフィールを編集">
-  </div>
-</form>
+<div class="profile__group">
+  <img
+    class="profile__image"
+    src="{{$user->thumbnail_path ? asset('storage/' . $user->thumbnail_path) : '/images/default-profile.png' }}">
+  <p class="profile__label" type="submit">{{$user->name}}</p>
+  <a class="profile__link" href="/mypage/profile">プロフィールを編集 </a>
+</div>
 <!-- アイテムタブ -->
 <div class="item-tab">
-  <a class="item-tab__link" href="/mypage">出品した商品</a>
-  <a class="item-tab__link--active" href="/mypage">購入した商品</a>
+  <a class="{{$tab === 'sell' ? 'item-tab__link' : 'item-tab__link--active'}}" href="/mypage">購入した商品</a>
+  <a class="{{$tab === 'sell' ? 'item-tab__link--active' : 'item-tab__link'}}" href="/mypage?tab=sell">出品した商品</a>
 </div>
 <!-- アイテムリスト -->
 <div class="item-list">
-  @for ($i = 0; $i < 5; $i++)
-    <div class="item-card">
+  @foreach ($items as $item)
+  <div class="item-card">
+    @if($tab === 'sell')
+    <img class="item-card__image" src="{{asset('storage/' . $item->image_path)}}" />
+    @else
     <a class="item-card__link" href=" /detail">
-      <img class="item-card__image" src="./images/default-profile.png" />
+      <img class="item-card__image" src="{{asset('storage/' . $item->image_path)}}" />
     </a>
-    <p class="item-card__label">商品名</p>
-</div>
-@endfor
+    @endif
+    <p class="item-card__label">{{$item->name}}</p>
+  </div>
+  @endforeach
 </div>
 
 </div>

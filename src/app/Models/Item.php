@@ -12,6 +12,7 @@ class Item extends Model
         'name',
         'price',
         'description',
+        'user_id',
         'condition_id',
         'image_path',
     ];
@@ -27,5 +28,4 @@ class Item extends Model
     {
         return $this->belongsTo(User::class);
     }
-
 }

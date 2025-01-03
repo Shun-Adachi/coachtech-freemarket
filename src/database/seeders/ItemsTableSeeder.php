@@ -20,7 +20,7 @@ class ItemsTableSeeder extends Seeder
             'description' => 'スタイリッシュなデザインのメンズ腕時計',
             'user_id' => '1',
             'condition_id' => '1',
-            'image_path' => '/default/Armani+Mens+Clock.jpg',
+            'image_path' => '/default/items/Armani+Mens+Clock.jpg',
         ];
         DB::table('items')->insert($param);
 
@@ -30,7 +30,7 @@ class ItemsTableSeeder extends Seeder
             'description' => '高速で信頼性の高いハードディスク',
             'user_id' => '1',
             'condition_id' => '2',
-            'image_path' => '/default/HDD+Hard+Disk.jpg',
+            'image_path' => '/default/items/HDD+Hard+Disk.jpg',
         ];
         DB::table('items')->insert($param);
 
@@ -40,7 +40,7 @@ class ItemsTableSeeder extends Seeder
             'description' => '新鮮な玉ねぎ3束のセット',
             'user_id' => '1',
             'condition_id' => '3',
-            'image_path' => '/default/iLoveIMG+d.jpg',
+            'image_path' => '/default/items/iLoveIMG+d.jpg',
         ];
         DB::table('items')->insert($param);
 
@@ -50,7 +50,7 @@ class ItemsTableSeeder extends Seeder
             'description' => 'クラシックなデザインの革靴',
             'user_id' => '1',
             'condition_id' => '4',
-            'image_path' => '/default/Leather+Shoes+Product+Photo.jpg',
+            'image_path' => '/default/items/Leather+Shoes+Product+Photo.jpg',
         ];
         DB::table('items')->insert($param);
 
@@ -60,7 +60,7 @@ class ItemsTableSeeder extends Seeder
             'description' => '高性能なノートパソコン',
             'user_id' => '1',
             'condition_id' => '1',
-            'image_path' => '/default/Living+Room+Laptop.jpg',
+            'image_path' => '/default/items/Living+Room+Laptop.jpg',
         ];
         DB::table('items')->insert($param);
 
@@ -70,7 +70,7 @@ class ItemsTableSeeder extends Seeder
             'description' => '高音質のレコーディング用マイク',
             'user_id' => '1',
             'condition_id' => '2',
-            'image_path' => '/default/Music+Mic+4632231.jpg',
+            'image_path' => '/default/items/Music+Mic+4632231.jpg',
         ];
         DB::table('items')->insert($param);
 
@@ -78,9 +78,9 @@ class ItemsTableSeeder extends Seeder
             'name' => 'ショルダーバッグ',
             'price' => '3500',
             'description' => 'おしゃれなショルダーバッグ',
-            'user_id' => '1',
+            'user_id' => '2',
             'condition_id' => '3',
-            'image_path' => '/default/Purse+fashion+pocket.jpg',
+            'image_path' => '/default/items/Purse+fashion+pocket.jpg',
         ];
         DB::table('items')->insert($param);
 
@@ -88,9 +88,9 @@ class ItemsTableSeeder extends Seeder
             'name' => 'タンブラー',
             'price' => '500',
             'description' => '使いやすいタンブラー',
-            'user_id' => '1',
+            'user_id' => '2',
             'condition_id' => '4',
-            'image_path' => '/default/Tumbler+souvenir.jpg',
+            'image_path' => '/default/items/Tumbler+souvenir.jpg',
         ];
         DB::table('items')->insert($param);
 
@@ -98,9 +98,9 @@ class ItemsTableSeeder extends Seeder
             'name' => 'コーヒーミル',
             'price' => '4000',
             'description' => '手動のコーヒーミル',
-            'user_id' => '1',
+            'user_id' => '2',
             'condition_id' => '1',
-            'image_path' => '/default/Waitress+with+Coffee+Grinder.jpg',
+            'image_path' => '/default/items/Waitress+with+Coffee+Grinder.jpg',
         ];
         DB::table('items')->insert($param);
 
@@ -108,9 +108,9 @@ class ItemsTableSeeder extends Seeder
             'name' => 'メイクセット',
             'price' => '2500',
             'description' => '便利なメイクアップセット',
-            'user_id' => '1',
+            'user_id' => '3',
             'condition_id' => '2',
-            'image_path' => '/default/外出メイクアップセット.jpg',
+            'image_path' => '/default/items/外出メイクアップセット.jpg',
         ];
         DB::table('items')->insert($param);
     }

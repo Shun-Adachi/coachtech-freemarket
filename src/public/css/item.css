@@ -1,25 +1,26 @@
 .item-content {
   width: 100%;
-  padding: 60px 0px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-bottom: 200px;
   display: flex;
   align-items: flex-start;
 }
 
 .item__image {
   width: 40%;
-  max-width: 600px;
   padding: 20px 0px 20px 40px;
 }
 
 .item-information {
   width: 60%;
-  max-width: 800px;
+  min-width: 400px;
   padding: 0px 40px;
 }
 
 .item-information__main-heading {
   margin: 0px;
-  font-size: 36px;
+  font-size: 30px;
 }
 
 .item-information__label--brand {
@@ -28,7 +29,7 @@
 
 .item-information__label--price {
   margin: 20px 0px;
-  font-size: 36px;
+  font-size: 30px;
 }
 
 .item-icon {
@@ -80,6 +81,7 @@
   min-width: 100px;
   margin: 0px;
   padding: 2px 0px;
+  font-size: large;
 }
 
 .item-category__group {
@@ -106,6 +108,7 @@
   width: 100px;
   margin: 10px 0px;
   padding: 2px 0px;
+  font-size: large;
 }
 
 .item-condition__group {}
@@ -126,6 +129,9 @@
 
 .item-comment__user-image {
   width: 100px;
+  height: 100px;
+  object-fit: contain;
+  background-color: #e0e0e0;
   border-radius: 50%;
 }
 
@@ -147,4 +153,10 @@
   height: 150px;
   padding: 10px;
   border-radius: 5px;
+}
+
+.item-form__error-message {
+  margin: 0;
+  font-size: large;
+  color: #f05454;
 }

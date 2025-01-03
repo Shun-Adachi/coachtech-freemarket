@@ -26,6 +26,7 @@
 
 .item-list {
   width: 100%;
+  margin-bottom: 100px;
   padding: 30px;
   display: flex;
   flex-wrap: wrap;
@@ -34,12 +35,16 @@
 
 .item-card {
   width: 250px;
+  height: 280px;
 }
 
 .item-card__link {}
 
 .item-card__image {
-  width: 100%;
+  width: 250px;
+  height: 250px;
+  object-fit: contain;
+  background-color: #e0e0e0;
 }
 
 .item-card__label {

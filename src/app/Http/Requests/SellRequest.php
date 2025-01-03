@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Storage;
 
-class UserRequest extends FormRequest
+class SellRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,9 +25,11 @@ class UserRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            'name' => 'required',
-            'post_code' => 'required | regex:/^\d{3}-\d{4}$/',
-            'address' => 'required',
+            'name' => ['required', 'string', 'max:255'],
+            'description' => ['required', 'string', 'max:255'],
+            'categories' => ['required'],
+            'condition' => ['required'],
+            'price' => ['required', 'integer', 'min:0'],
         ];
 
         // 画像が新たに選択されていない場合、一時保存された画像を利用
@@ -36,7 +38,7 @@ class UserRequest extends FormRequest
             $rules['image'] = [];
         } else {
             // 通常のバリデーションルール
-            $rules['image'] = ['mimes:jpg,jpeg,png', 'max:2048'];
+            $rules['image'] = ['required', 'mimes:jpg,jpeg,png', 'max:2048'];
         }
 
         return $rules;
@@ -45,17 +47,21 @@ class UserRequest extends FormRequest
     public function messages()
     {
         return [
+            'image.required' => '商品画像を選択してください',
             'image.mimes' => '画像ファイルはJPEGもしくはPNGを選択してください',
-            'name.required' => 'ユーザー名を入力してください',
-            'post_code.required' => '郵便番号を入力してください',
-            'post_code.regex' => '郵便番号は8文字(ハイフンあり)の形で入力してください',
-            'address.required' => '住所を入力してください',
+            'name.required' => '商品名を入力してください',
+            'description.required' => '商品説明を入力してください',
+            'description.max' => '商品説明は255以下で入力してください',
+            'categories.required' => 'カテゴリーを選択してください',
+            'condition.required' => '商品の状態を選択してください',
+            'price.required' => '販売価格を入力してください',
+            'price.integer' => '販売価格は整数を入力してください',
+            'price.min' => '販売価格は0円以上で入力してください',
         ];
     }
 
     protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
     {
-        //dd($this->temp_image);
         // 新しいファイルがアップロードされた場合の処理
         if ($this->hasFile('image')) {
             // 既存の一時ファイルを削除

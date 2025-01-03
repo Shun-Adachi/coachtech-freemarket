@@ -14,8 +14,8 @@
 .sell-form__group {}
 
 .sell-form__label {
-  display: block;
-  margin-top: 20px;
+  display: inline-block;
+  margin-top: 10px;
   margin-bottom: 0px;
   font-size: 20px;
   font-weight: bold;
@@ -84,6 +84,7 @@
   border-radius: 30px;
   color: #ff5454;
   font-size: small;
+  cursor: pointer;
 }
 
 .sell-form__checkbox {
@@ -106,13 +107,17 @@
 .sell-form__input {
   width: 100%;
   height: 30px;
+  padding-left: 10px;
   border-radius: 3px;
+  font-size: large;
 }
 
 .sell-form__textarea {
   width: 100%;
   height: 150px;
+  padding-left: 10px;
   border-radius: 3px;
+  font-size: large;
   resize: none;
 }
 
@@ -153,4 +158,12 @@
   border: none;
   border-radius: 5px;
   color: #ffffff;
+}
+
+.sell-form__error-message {
+  display: inline-block;
+  margin: 0;
+  padding: 0px 10px;
+  background-color: #ffffd0;
+  color: #f05454;
 }

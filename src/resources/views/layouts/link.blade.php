@@ -1,23 +1,11 @@
 @section('link')
 
 @if(auth()->check())
-<form action="/logout" method="post">
-  @csrf
-  <input class="header-link__link" type="submit" value="ログアウト">
-</form>
-<form action="/mypage" method="post">
-  @csrf
-  <input class="header-link__link" type="submit" value="マイページ">
-</form>
-<form action="/sell" method="post">
-  @csrf
-  <input class="header-link__link--sell" type="submit" value="出品">
-</form>
+<a class="header-link__link" href="/logout">ログアウト</a>
 @else
-<form action="/login" method="get">
-  @csrf
-  <input class="header-link__link" type="submit" value="ログイン">
-</form>
+<a class="header-link__link" href="/login">ログイン</a>
 @endif
+<a class="header-link__link" href="/mypage">マイページ</a>
+<a class="header-link__link--sell" href="/sell">出品</a>
 
 @endsection

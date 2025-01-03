@@ -18,7 +18,13 @@
     <p class="item-information__label--price">{{$item->price}}</p>
     <div class="item-icon">
       <div class="item-icon__group">
-        <img class="item-icon__image" src="/images/favorite.svg" />
+        <a class="item-icon__link" href="{{'/item/favorite/' . $item->id}}">
+          @if($my_favorite_count===0)
+          <img class="item-icon__image" src="/images/favorite-inactive.png" />
+          @else
+          <img class="item-icon__image" src="/images/favorite-active.png" />
+          @endif
+        </a>
         <p class="item-icon__label">{{$favorites_count}}</p>
       </div>
       <div class="item-icon__group">
@@ -58,11 +64,10 @@
       <div class="item-comment__user-group">
         <img
           class="item-comment__user-image"
-          src="{{ $profileImage ?? '/images/default-profile.png'}}"
-          alt="プロフィール画像">
-        <p class="item-comment__user-name">admin</p>
+          src="{{ $comment->user->thumbnail_path ? asset('storage/' . $comment->user->thumbnail_path) : '/images/default-profile.png'}}">
+        <p class="item-comment__user-name">{{$comment->user->name}}</p>
       </div>
-      <p class="item-comment__text">こちらにコメントが入ります。</p>
+      <p class="item-comment__text">{{$comment->comment}}</p>
       @endforeach
       @if($comments_count === 0)
       <div class="item-comment__user-group">
@@ -74,7 +79,13 @@
     <form class="item-form" action="/item/comment" method="post">
       @csrf
       <h3 class="item-information__sub-heading">商品へのコメント</h3>
-      <textarea class="item-form__textarea" value=""></textarea>
+      <p class="item-form__error-message">
+        @error('comment')
+        {{ $message }}
+        @enderror
+      </p>
+      <input type="hidden" name="item_id" value={{$item->id}}>
+      <textarea class="item-form__textarea" name="comment">{{ old('comment') }}</textarea>
       <input class="item-form__button" type="submit" value="コメントを送信する">
     </form>
   </div>

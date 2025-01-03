@@ -9,15 +9,29 @@
 @section('content')
 <div class="sell-form">
   <h2 class="sell-form__main-heading">商品の出品</h2>
-  <form class="sell-form__form" action="/sell/create" method="post">
+  <form class="sell-form__form" action="/sell/create" method="post" enctype="multipart/form-data">
     @csrf
     <!-- 商品画像 -->
     <div class="sell-form__group">
       <label class="sell-form__label" for="item-image">商品画像</label>
+      <p class="sell-form__error-message">
+        @error('image')
+        {{ $message }}
+        @enderror
+      </p>
       <div class="sell-form__image-upload-container">
         <button class="sell-form__file-upload-button" type="button">画像を選択する</button>
-        <input class="sell-form__hidden-file-input" type="file" accept="image/*">
-        <img class="sell-form__image-preview" src="">
+        <input
+          class="sell-form__hidden-file-input"
+          type="file"
+          name="image"
+          accept=".jpg,.jpeg,.png">
+        <img
+          class="sell-form__image-preview"
+          style="display: {{ session('temp_image') ? 'block' : 'none' }};"
+          name="image-preview"
+          src="{{ session('temp_image') ? asset('storage/' . session('temp_image')) : '' }}">
+        <input type="hidden" name="temp_image" value="{{session('temp_image') ?? ''}}">
       </div>
     </div>
     <!-- 商品の詳細 -->
@@ -26,60 +40,43 @@
     <!-- カテゴリ -->
     <div class="sell-form__group">
       <label class="sell-form__label">カテゴリー</label>
+      <p class="sell-form__error-message">
+        @error('categories')
+        {{ $message }}
+        @enderror
+      </p>
       <div class="sell-form__label-container">
-
-        <input class="sell-form__checkbox" type="checkbox" name="category" value="1" id="checkbox1">
-        <label class="sell-form__category-label" for="checkbox1">ファッション</label>
-
-        <input class="sell-form__checkbox" type="checkbox" name="category" value="2" id="checkbox2">
-        <label class="sell-form__category-label" for="checkbox2">家電</label>
-
-        <input class="sell-form__checkbox" type="checkbox" name="category" value="3" id="checkbox3">
-        <label class="sell-form__category-label" for="checkbox3">インテリア</label>
-
-        <input class="sell-form__checkbox" type="checkbox" name="category" value="4" id="checkbox4">
-        <label class="sell-form__category-label" for="checkbox4">レディース</label>
-
-        <input class="sell-form__checkbox" type="checkbox" name="category" value="5" id="checkbox5">
-        <label class="sell-form__category-label" for="checkbox5">メンズ</label>
-
-        <input class="sell-form__checkbox" type="checkbox" name="category" value="6" id="checkbox6">
-        <label class="sell-form__category-label" for="checkbox6">コスメ</label>
-
-        <input class="sell-form__checkbox" type="checkbox" name="category" value="7" id="checkbox7">
-        <label class="sell-form__category-label" for="checkbox7">本</label>
-
-        <input class="sell-form__checkbox" type="checkbox" name="category" value="8" id="checkbox8">
-        <label class="sell-form__category-label" for="checkbox8">ゲーム</label>
-
-        <input class="sell-form__checkbox" type="checkbox" name="category" value="9" id="checkbox9">
-        <label class="sell-form__category-label" for="checkbox9">スポーツ</label>
-
-        <input class="sell-form__checkbox" type="checkbox" name="category" value="10" id="checkbox10">
-        <label class="sell-form__category-label" for="checkbox10">キッチン</label>
-
-        <input class="sell-form__checkbox" type="checkbox" name="category" value="11" id="checkbox11">
-        <label class="sell-form__category-label" for="checkbox11">ハンドメイド</label>
-
-        <input class="sell-form__checkbox" type="checkbox" name="category" value="12" id="checkbox12">
-        <label class="sell-form__category-label" for="checkbox12">アクセサリー</label>
-
-        <input class="sell-form__checkbox" type="checkbox" name="category" value="13" id="checkbox13">
-        <label class="sell-form__category-label" for="checkbox13">おもちゃ</label>
-
-        <input class="sell-form__checkbox" type="checkbox" name="category" value="14" id="checkbox14">
-        <label class="sell-form__category-label" for="checkbox14">ベビー・キッズ</label>
+        @foreach($categories as $category)
+        <input
+          class="sell-form__checkbox"
+          type="checkbox"
+          name="categories[]"
+          value="{{$category->id}}"
+          id="{{'checkbox' . $category->id}}"
+          {{ in_array($category->id, old('categories', [])) ? 'checked' : '' }}>
+        <label
+          class="sell-form__category-label"
+          for="{{'checkbox' . $category->id}}">
+          {{$category->name}}
+        </label>
+        @endforeach
       </div>
     </div>
     <!-- 商品の状態 -->
     <div class="sell-form__group">
       <label class="sell-form__label" for="condition">商品の状態</label>
+      <p class="sell-form__error-message">
+        @error('condition')
+        {{ $message }}
+        @enderror
+      </p>
       <select class="sell-form__select" name="condition" id="condition">
         <option value="">選択してください</option>
-        <option value="1">良好</option>
-        <option value="2">目立った傷や汚れなし</option>
-        <option value="3">やや傷やよごれあり</option>
-        <option value="4">状態が悪い</option>
+        @foreach($conditions as $condition)
+        <option value="{{$condition->id}}" {{old('condition') == $condition->id ? 'selected' : ''}}>
+          {{$condition->name}}
+        </option>>
+        @endforeach
       </select>
     </div>
     <!-- 商品名と説明 -->
@@ -87,19 +84,34 @@
     <!-- 商品名 -->
     <div class="sell-form__group">
       <label class="sell-form__label" for="name">商品名</label>
-      <input class="sell-form__input" type="text" name="name" id="name">
+      <p class="sell-form__error-message">
+        @error('name')
+        {{ $message }}
+        @enderror
+      </p>
+      <input class="sell-form__input" type="text" name="name" id="name" value="{{old('name')}}">
     </div>
     <!-- 商品の説明 -->
     <div class="sell-form__group">
       <label class="sell-form__label" for="description">商品の説明</label>
-      <textarea class="sell-form__textarea" name="description" id="description"></textarea>
+      <p class="sell-form__error-message">
+        @error('description')
+        {{ $message }}
+        @enderror
+      </p>
+      <textarea class=" sell-form__textarea" name="description" id="description">{{old('description')}}</textarea>
     </div>
     <!-- 販売価格 -->
     <div class="sell-form__group">
       <label class="sell-form__label" for="price">販売価格</label>
+      <p class="sell-form__error-message">
+        @error('price')
+        {{ $message }}
+        @enderror
+      </p>
       <div class="sell-form__price-group">
         <label class="sell-form__label--yen-mark" for="price">\</label>
-        <input class="sell-form__input--price" type="number" name="price" id="price" min="0" step="1000" value="">
+        <input class="sell-form__input--price" type="number" min="0" name="price" id="price" value="{{old('price')}}">
       </div>
     </div>
     <!-- 出品ボタン -->
@@ -118,6 +130,7 @@
   fileUploadButton.addEventListener('click', () => {
     fileInput.click();
   });
+
   fileInput.addEventListener('change', (event) => {
     const file = event.target.files[0];
 

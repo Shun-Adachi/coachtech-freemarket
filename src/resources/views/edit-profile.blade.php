@@ -14,12 +14,21 @@
     @csrf
     <!-- 画像選択 -->
     <div class="user-form__image-group">
-      <img
-        class="user-form__image-preview"
-        src="{{ $user->thumbnail_path ? asset('storage/' . $user->thumbnail_path) : '/images/default-profile.png' }}"
-        alt="プロフィール画像">
+      @if(session('temp_image'))
+      <img class="user-form__image-preview" name="image-preview" src="{{ asset('storage/' . session('temp_image'))}}">
+      @elseif($user->thumbnail_path)
+      <img class="user-form__image-preview" name="image-preview" src="{{ asset('storage/' . $user->thumbnail_path)}}">
+      @else
+      <img class="user-form__image-preview" name="image-preview" src="{{ '/images/default-profile.png'}}">
+      @endif
       <button class="user-form__file-upload-button" type="button">画像を選択する</button>
-      <input class="user-form__hidden-file-input" type="file" name="image" id="image" accept="image/*">
+      <input
+        class="user-form__hidden-file-input"
+        type="file"
+        name="image"
+        id="image"
+        accept=".jpg,.jpeg,.png">
+      <input type="hidden" name="temp_image" value="{{session('temp_image') ?? ''}}">
     </div>
     <!-- ユーザー情報入力 -->
     <div class="user-form__group">
