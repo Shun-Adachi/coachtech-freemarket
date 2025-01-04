@@ -49,19 +49,19 @@
   text-align: center;
 }
 
-.item-form {
-  width: 100%;
-}
-
-.item-form__button {
+.item-form__link {
+  display: block;
   width: 100%;
   height: 40px;
   margin: 15px auto 0px auto;
+  padding: 5px 10px;
   background-color: #f05454;
   border: none;
+  border-radius: 5px;
   color: #ffffff;
   font-size: large;
-  border-radius: 5px;
+  text-align: center;
+  text-decoration: none;
 }
 
 .item-information__sub-heading {
@@ -152,6 +152,17 @@
   width: 100%;
   height: 150px;
   padding: 10px;
+  border-radius: 5px;
+}
+
+.item-form__button {
+  width: 100%;
+  height: 40px;
+  margin: 15px auto 0px auto;
+  background-color: #f05454;
+  border: none;
+  color: #ffffff;
+  font-size: large;
   border-radius: 5px;
 }
 

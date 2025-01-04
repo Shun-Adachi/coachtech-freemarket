@@ -10,9 +10,10 @@ use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
 use Laravel\Fortify\Fortify;
 use App\Http\Requests\LoginRequest;
+//use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
 class FortifyServiceProvider extends ServiceProvider
 {
@@ -20,7 +21,23 @@ class FortifyServiceProvider extends ServiceProvider
      * Bootstrap any application services.
      */
     public function boot(): void
-    {
+    {/*
+        Fortify::authenticateUsing(function ($request) {
+            $user = \App\Models\User::where('email', $request->email)->first();
+
+            if ($user && Hash::check($request->password, $user->password)) {
+                return $user; // ユーザーオブジェクトを返す
+            }
+
+            return null; // 認証失敗時はnullを返す
+        });
+
+        // Fortifyのログイン処理にカスタムコントローラーを適用
+        $this->app->bind(
+            \Laravel\Fortify\Http\Controllers\AuthenticatedSessionController::class,
+            AuthenticatedSessionController::class
+        );
+*/
         Fortify::createUsersUsing(CreateNewUser::class);
 
         Fortify::registerView(function () {
@@ -53,5 +70,15 @@ class FortifyServiceProvider extends ServiceProvider
             \Laravel\Fortify\Http\Requests\LoginRequest::class,
             LoginRequest::class
         );
+
+        // ログイン後のリダイレクト先を変更
+        $this->app->singleton(\Laravel\Fortify\Contracts\LoginResponse::class, function ($app) {
+            return new class implements \Laravel\Fortify\Contracts\LoginResponse {
+                public function toResponse($request)
+                {
+                    return redirect('/'); // ログイン後の固定リダイレクト先
+                }
+            };
+        });
     }
 }

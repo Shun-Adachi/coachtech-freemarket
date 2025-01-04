@@ -28,7 +28,7 @@
     @if($tab === 'sell')
     <img class="item-card__image" src="{{asset('storage/' . $item->image_path)}}" />
     @else
-    <a class="item-card__link" href=" /detail">
+    <a class="item-card__link" href="{{'/item/' . $item->id}}">
       <img class="item-card__image" src="{{asset('storage/' . $item->image_path)}}" />
     </a>
     @endif

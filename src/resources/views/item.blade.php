@@ -12,7 +12,7 @@
   <img class="item__image" src="{{asset('storage/' . $item->image_path)}}" />
   <!-- 商品情報一覧 -->
   <div class="item-information">
-    <!-- 概要 -->
+    <!-- 商品概要 -->
     <h2 class="item-information__main-heading">{{$item->name}}</h2>
     <p class="item-information__label--brand">{{$item->user->name}}</p>
     <p class="item-information__label--price">{{$item->price}}</p>
@@ -32,16 +32,13 @@
         <p class="item-icon__label">{{$comments_count}}</p>
       </div>
     </div>
-    <form class="item-form" action="/purchase" method="post">
-      @csrf
-      <input class="item-form__button" type="submit" value="購入手続きへ">
-    </form>
+    <a class="item-form__link" href="{{'/purchase/' . $item->id}}">購入手続きへ</a>
     <!-- 説明 -->
     <h3 class="item-information__sub-heading">商品説明</h3>
     <p class="item-information__label__description">
       {{$item->description}}
     </p>
-    <!-- 商品情報 -->
+    <!-- 詳細説明 -->
     <h3 class="item-information__sub-heading">商品の情報</h3>
     <div class="item-category">
       <h4 class="item-category__heading">カテゴリー</h4>

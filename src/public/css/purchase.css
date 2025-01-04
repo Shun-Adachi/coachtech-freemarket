@@ -20,8 +20,12 @@
 }
 
 .purchase-form__image {
-  width: 240px;
-  padding-right: 40px;
+  width: 45%;
+  min-width: 160px;
+  min-height: 160px;
+  margin-right: 40px;
+  object-fit: contain;
+  background-color: #e0e0e0;
 }
 
 .purchase-form__item-group {}
@@ -49,7 +53,7 @@
 }
 
 .purchase-form__select {
-  margin-left: 60px;
+  margin-left: 5%;
   height: 25px;
   padding-right: 100px;
   background-color: #808080;
@@ -59,23 +63,24 @@
 
 .purchase-address {
   display: flex;
+  width: 100%;
   justify-content: space-between;
   padding-top: 20px;
   padding-bottom: 40px;
   border-bottom: 2px #808080 solid;
 }
 
-.purchase-address_group {
-  width: 70%;
-  max-width: 500px;
+.purchase-address__group {
+  width: 100%;
 }
 
 .purchase-form__input {
   display: block;
+  width: 100%;
   margin: 10px 0px;
-  padding-left: 60px;
+  padding-left: 5%;
   border: none;
-  font-size: large;
+  font-size: medium;
   font-weight: bold;
 }
 
@@ -85,10 +90,16 @@
 }
 
 .purchase-form__link {
-  width: 80px;
   display: block;
+  width: 80px;
+  height: 100%;
+  margin-top: 0;
+  border: none;
+  background-color: rgba(0, 0, 0, 0);
   text-decoration: none;
+  align-items: normal;
   color: #0073CC;
+  cursor: pointer;
 }
 
 .payment-summary {
@@ -121,4 +132,10 @@
   border: none;
   border-radius: 5px;
   color: #ffffff;
+  cursor: pointer;
+}
+
+.purchase-form__message {
+  padding-left: 20px;
+  color: #f05454;
 }
