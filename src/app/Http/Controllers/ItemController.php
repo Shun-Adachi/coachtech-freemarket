@@ -36,9 +36,12 @@ class ItemController extends Controller
         //商品一覧
         else {
             $items = Item::where('user_id', '!=', $user_id)->get();
+            $purchases = Purchase::where('user_id', $user_id)->get();
         }
 
-        return view('index', compact('items', 'tab'));
+        $sold_item_ids = Purchase::pluck('item_id')->toArray();
+
+        return view('index', compact('items', 'tab', 'sold_item_ids'));
     }
 
     // 商品詳細ページ表示
@@ -131,7 +134,7 @@ class ItemController extends Controller
             : moveTempImageToPermanentLocation($request->temp_image, 'images/items/');
 
         // 商品データの保存
-        Item::create([
+        $item = Item::create([
             'name' => $request->name,
             'description' => $request->description,
             'user_id' => $user->id,
@@ -139,6 +142,14 @@ class ItemController extends Controller
             'price' => $request->price,
             'image_path' => $image_path,
         ]);
+
+        // カテゴリと商品の関連を保存
+        foreach ($request->categories as $category_id) {
+            CategoryItem::create([
+                'item_id' => $item->id,
+                'category_id' => $category_id,
+            ]);
+        }
 
         return redirect('/mypage?tab=sell')->with('message', '商品を出品しました。');
     }

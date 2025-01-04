@@ -19,6 +19,9 @@
   @foreach ($items as $item)
   <div class="item-card">
     <a class="item-card__link" href="{{'/item/' . $item->id}}">
+      @if (in_array($item->id, $sold_item_ids))
+      <span class="item-card__text--sold">SOLD</span>
+      @endif
       <img class="item-card__image" src="{{asset('storage/' . $item->image_path)}}" />
     </a>
     <p class="item-card__label">{{$item->name}}</p>

@@ -1,6 +1,6 @@
 .item-content {
   width: 100%;
-  max-width: 1200px;
+  max-width: 1100px;
   margin: 0 auto;
   padding-bottom: 200px;
   display: flex;
@@ -9,13 +9,13 @@
 
 .item__image {
   width: 40%;
-  padding: 20px 0px 20px 40px;
+  padding: 20px 2%;
 }
 
 .item-information {
   width: 60%;
   min-width: 400px;
-  padding: 0px 40px;
+  padding: 0px 2%;
 }
 
 .item-information__main-heading {
