@@ -3,7 +3,6 @@
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ItemController;
 use Illuminate\Support\Facades\Route;
-//use App\Http\Controllers\Auth\AuthenticatedSessionController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,9 +12,6 @@ use Illuminate\Support\Facades\Route;
 | routes are loaded by the RouteServiceProvider within a group which
 | contains the "web" middleware group. Now create something great!
 |
-*/
-/*
-Route::post('/login', [AuthenticatedSessionController::class, 'store']);
 */
 
 Route::middleware('auth')->group(function () {

@@ -13,7 +13,6 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Fortify\Fortify;
 use App\Http\Requests\LoginRequest;
-//use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
 class FortifyServiceProvider extends ServiceProvider
 {
@@ -21,23 +20,7 @@ class FortifyServiceProvider extends ServiceProvider
      * Bootstrap any application services.
      */
     public function boot(): void
-    {/*
-        Fortify::authenticateUsing(function ($request) {
-            $user = \App\Models\User::where('email', $request->email)->first();
-
-            if ($user && Hash::check($request->password, $user->password)) {
-                return $user; // ユーザーオブジェクトを返す
-            }
-
-            return null; // 認証失敗時はnullを返す
-        });
-
-        // Fortifyのログイン処理にカスタムコントローラーを適用
-        $this->app->bind(
-            \Laravel\Fortify\Http\Controllers\AuthenticatedSessionController::class,
-            AuthenticatedSessionController::class
-        );
-*/
+    {
         Fortify::createUsersUsing(CreateNewUser::class);
 
         Fortify::registerView(function () {
