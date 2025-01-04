@@ -45,23 +45,21 @@ class UserController extends Controller
     public function update(UserRequest $request)
     {
         $user = auth()->user();
-        $path = $request->temp_image;
+        $temp_image = $request->temp_image;
 
         //画像選択あり
         if ($request->hasFile('image')) {
             // 古い画像を削除
-            if ($user->thumbnail_path && Storage::disk('public')->exists($user->thumbnail_path)) {
-                Storage::disk('public')->delete($user->thumbnail_path);
-            }
+            $this->deleteThumbnail($user->thumbnail_path);
             // ファイルを保存し、パスを取得
             $thumbnail_path = $request->file('image')->store('images/users/', 'public');
         }
         //画像選択なし、一時ファイルあり
-        elseif ($request->temp_image) {
-            if ($user->thumbnail_path && Storage::disk('public')->exists($user->thumbnail_path)) {
-                Storage::disk('public')->delete($user->thumbnail_path);
-            }
-            $thumbnail_path = $this->moveTempImageToPermanentLocation($path); // 一時画像を移動
+        elseif ($temp_image) {
+            // 古い画像を削除
+            $this->deleteThumbnail($user->thumbnail_path);
+            // 一時ファイルを移動し、パスを取得
+            $thumbnail_path = moveTempImageToPermanentLocation($temp_image, 'images/users/');
         }
         //画像選択なし、一時ファイルなし
         else {
@@ -80,23 +78,11 @@ class UserController extends Controller
         return redirect('/mypage')->with('message', 'プロフィールが更新されました');
     }
 
-    //一時ファイルを正式な保存場所へ移動
-    protected function moveTempImageToPermanentLocation($tempImagePath)
+    //ユーザープロフィール画像削除
+    public function deleteThumbnail($thumbnailPath)
     {
-        // 一時ファイルのパスが存在しない場合は null を返す
-        if (!$tempImagePath || !Storage::disk('public')->exists($tempImagePath)) {
-            return null;
+        if ($thumbnailPath && Storage::disk('public')->exists($thumbnailPath)) {
+            Storage::disk('public')->delete($thumbnailPath);
         }
-
-        // 移動先のパスを定義
-        $newPath = 'images/users/' . basename($tempImagePath);
-
-        // ファイルを新しい場所にコピー
-        Storage::disk('public')->move($tempImagePath, $newPath);
-
-        // 移動後に一時ファイルを削除（不要ならコメントアウト）
-        Storage::disk('public')->delete($tempImagePath);
-
-        return $newPath;
     }
 }

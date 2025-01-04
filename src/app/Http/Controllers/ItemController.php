@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 use App\Models\Item;
 use App\Models\Favorite;
 use App\Models\Comment;
@@ -16,6 +15,7 @@ use App\Http\Requests\SellRequest;
 
 class ItemController extends Controller
 {
+
     // 商品一覧ページ表示
     public function index(Request $request)
     {
@@ -51,7 +51,7 @@ class ItemController extends Controller
         $price = '\\ ' . number_format($item->price);
         $item->price = $price;
 
-        //お気に入り情報
+        //お気に入り情報取得
         if ($user_id) {
             $my_favorite_count = Favorite::where('item_id', $item_id)->where('user_id', $user_id)->count();
         } else {
@@ -121,12 +121,11 @@ class ItemController extends Controller
     public function store(SellRequest $request)
     {
         $user = Auth::user();
-        $path = $request->temp_image;
 
         // 一時保存された画像の利用
         $image_path = $request->file('image')
             ? $request->file('image')->store('images/items', 'public')
-            : $this->moveTempImageToPermanentLocation($path); // 一時画像を移動
+            : moveTempImageToPermanentLocation($request->temp_image, 'images/items/');
 
         // 商品データの保存
         Item::create([
@@ -138,32 +137,6 @@ class ItemController extends Controller
             'image_path' => $image_path,
         ]);
 
-        // 一時ファイルの削除
-        if ($path && !$request->file('image')) {
-            Storage::delete($path);
-            session()->forget('temp_image');
-        }
-
         return redirect('/mypage?tab=sell')->with('message', '商品を出品しました。');
-    }
-
-    //一時ファイルを正式な保存場所へ移動
-    protected function moveTempImageToPermanentLocation($tempImagePath)
-    {
-        // 一時ファイルのパスが存在しない場合は null を返す
-        if (!$tempImagePath || !Storage::disk('public')->exists($tempImagePath)) {
-            return null;
-        }
-
-        // 移動先のパスを定義
-        $newPath = 'images/items/' . basename($tempImagePath);
-
-        // ファイルを新しい場所にコピー
-        Storage::disk('public')->move($tempImagePath, $newPath);
-
-        // 移動後に一時ファイルを削除（不要ならコメントアウト）
-        Storage::disk('public')->delete($tempImagePath);
-
-        return $newPath;
     }
 }

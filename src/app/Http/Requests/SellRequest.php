@@ -32,9 +32,8 @@ class SellRequest extends FormRequest
             'price' => ['required', 'integer', 'min:0'],
         ];
 
-        // 画像が新たに選択されていない場合、一時保存された画像を利用
         if (!$this->hasFile('image') && $this->temp_image) {
-            // 画像が既に一時保存されている場合は必須チェックをスキップ
+            // 一時保存されている場合は必須チェックをスキップ
             $rules['image'] = [];
         } else {
             // 通常のバリデーションルール
@@ -62,23 +61,7 @@ class SellRequest extends FormRequest
 
     protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
     {
-        // 新しいファイルがアップロードされた場合の処理
-        if ($this->hasFile('image')) {
-            // 既存の一時ファイルを削除
-            if ($this->temp_image) {
-                Storage::disk('public')->delete($this->temp_image);
-            }
-            // 新しいファイルを保存
-            $path = $this->file('image')->store('temp', 'public');
-            // セッションにパスを保存
-            $this->session()->flash('temp_image', $path);
-        }
-        // ファイルがアップロードされておらず、一時ファイルが存在する場合の処理
-        elseif ($this->temp_image) {
-            //　セッションにパスを保存
-            $this->session()->flash('temp_image', $this->temp_image);
-        }
-
+        handleTempImageUpload($this, $validator);
         parent::failedValidation($validator);
     }
 }
