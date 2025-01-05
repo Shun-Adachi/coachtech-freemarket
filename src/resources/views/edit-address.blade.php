@@ -15,6 +15,7 @@
   <form class="user-form__form" action="/purchase/address/update" method="post">
     @csrf
     <input type="hidden" name="item_id" value="{{old('item_id') ?? $shipping_address['item_id'] ?? ''}}" />
+    <input type="hidden" name="payment_method" value="{{old('payment_method') ?? $shipping_address['payment_method'] ?? ''}}" />
     <div class="user-form__group">
       <label class="user-form__label" for="post_code">郵便番号</label>
       <input class="user-form__input" type="text" name="post_code" id="post_code" value="{{old('post_code') ?? $shipping_address['post_code'] ?? ''}}" />

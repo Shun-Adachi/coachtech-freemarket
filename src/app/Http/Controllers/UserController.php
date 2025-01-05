@@ -78,6 +78,13 @@ class UserController extends Controller
         return redirect('/mypage')->with('message', 'プロフィールが更新されました');
     }
 
+    // ログアウト処理
+    public function logout(Request $request)
+    {
+        Auth::logout();
+        return redirect('/')->with('message', 'ログアウトしました');
+    }
+
     //ユーザープロフィール画像削除
     public function deleteThumbnail($thumbnailPath)
     {

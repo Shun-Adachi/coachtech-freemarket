@@ -3,7 +3,6 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Storage;
 
 class UserRequest extends FormRequest
 {
@@ -31,11 +30,11 @@ class UserRequest extends FormRequest
         ];
 
         if (!$this->hasFile('image') && $this->temp_image) {
-            // 一時保存されている場合は必須チェックをスキップ
+            // 一時保存されている場合はチェックをスキップ
             $rules['image'] = [];
         } else {
             // 通常のバリデーションルール
-            $rules['image'] = ['mimes:jpg,jpeg,png', 'max:2048'];
+            $rules['image'] = ['mimes:jpg,jpeg,png'];
         }
 
         return $rules;
@@ -44,7 +43,7 @@ class UserRequest extends FormRequest
     public function messages()
     {
         return [
-            'image.mimes' => '画像ファイルはJPEGもしくはPNGを選択してください',
+            'image.mimes' => '画像ファイルはJPEGもしくはPNG形式を選択してください',
             'name.required' => 'ユーザー名を入力してください',
             'post_code.required' => '郵便番号を入力してください',
             'post_code.regex' => '郵便番号は8文字(ハイフンあり)の形で入力してください',

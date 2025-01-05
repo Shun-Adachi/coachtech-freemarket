@@ -31,6 +31,13 @@
         accept=".jpg,.jpeg,.png">
       <input type="hidden" name="temp_image" value="{{session('temp_image') ?? ''}}">
     </div>
+    <div class="user-form__group">
+      <p class="user-form__error-message">
+        @error('image')
+        {{ $message }}
+        @enderror
+      </p>
+    </div>
     <!-- ユーザー情報入力 -->
     <div class="user-form__group">
       <label class="user-form__label" for="name">ユーザー名</label>
