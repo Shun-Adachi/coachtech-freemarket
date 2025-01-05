@@ -5,6 +5,9 @@ use App\Http\Controllers\SellController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\ItemController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
+use App\Models\User;
+use App\Http\Controllers\CustomAuthenticatedSessionController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -16,7 +19,21 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/login', [CustomAuthenticatedSessionController::class, 'create'])
+    ->middleware('guest')
+    ->name('login');
+Route::post('/login', [CustomAuthenticatedSessionController::class, 'store']);
+
+Route::prefix('/')->group(function () {
+    Route::get('/', [ItemController::class, 'index']);
+    Route::post('/', [ItemController::class, 'index']);
+    Route::middleware(['clear.session'])->group(function () {
+        Route::get('/item/{item_id}', [ItemController::class, 'show']);
+    });
+});
+
 Route::middleware('auth')->group(function () {
+
     Route::middleware(['clear.session'])->group(function () {
         Route::post('/purchase/buy', [PurchaseController::class, 'buy']);
         Route::get('/item/favorite/{item_id}', [ItemController::class, 'favorite']);
@@ -34,10 +51,21 @@ Route::middleware('auth')->group(function () {
     Route::get('/purchase/{item_id}', [PurchaseController::class, 'purchase'])->name('purchase');
 });
 
-Route::prefix('/')->group(function () {
-    Route::get('/', [ItemController::class, 'index']);
-    Route::post('/', [ItemController::class, 'index']);
-    Route::middleware(['clear.session'])->group(function () {
-        Route::get('/item/{item_id}', [ItemController::class, 'show']);
-    });
+
+Route::get('/verify-login', function (Request $request) {
+    $token = $request->query('token');
+
+    $user = User::where('login_token', $token)->first();
+
+    if (!$user) {
+        return redirect('/login')->withErrors(['error' => 'ログインに失敗しました']);
+    }
+
+    // トークンを無効化し、ログイン
+    $user->login_token = null;
+    $user->save();
+
+    Auth::login($user);
+
+    return redirect('/')->with('message', 'ログインしました');
 });

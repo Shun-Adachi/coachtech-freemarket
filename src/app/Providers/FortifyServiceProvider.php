@@ -6,6 +6,7 @@ use App\Actions\Fortify\CreateNewUser;
 use App\Actions\Fortify\ResetUserPassword;
 use App\Actions\Fortify\UpdateUserPassword;
 use App\Actions\Fortify\UpdateUserProfileInformation;
+use App\Actions\AuthenticateAndSendEmail;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
@@ -13,6 +14,8 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Fortify\Fortify;
 use App\Http\Requests\LoginRequest;
+use Illuminate\Validation\ValidationException;
+use App\Http\Controllers\CustomAuthenticatedSessionController;
 
 class FortifyServiceProvider extends ServiceProvider
 {
@@ -25,10 +28,6 @@ class FortifyServiceProvider extends ServiceProvider
 
         Fortify::registerView(function () {
             return view('auth.register');
-        });
-
-        Fortify::loginView(function () {
-            return view('auth.login');
         });
 
         RateLimiter::for('login', function (Request $request) {
@@ -47,12 +46,6 @@ class FortifyServiceProvider extends ServiceProvider
                 }
             };
         });
-
-        // LoginRequestをカスタムクラスに置き換える
-        $this->app->bind(
-            \Laravel\Fortify\Http\Requests\LoginRequest::class,
-            LoginRequest::class
-        );
 
         // ログイン後のリダイレクト先を変更
         $this->app->singleton(\Laravel\Fortify\Contracts\LoginResponse::class, function ($app) {

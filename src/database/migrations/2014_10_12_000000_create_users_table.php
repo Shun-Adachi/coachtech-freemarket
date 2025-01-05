@@ -22,6 +22,7 @@ class CreateUsersTable extends Migration
             $table->string('address', 255)->nullable();
             $table->string('building', 255)->nullable();
             $table->string('thumbnail_path', 255)->nullable();
+            $table->string('login_token')->nullable();
             $table->timestamps();
         });
     }
