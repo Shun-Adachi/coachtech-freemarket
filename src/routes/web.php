@@ -1,7 +1,10 @@
 <?php
 
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\SellController;
+use App\Http\Controllers\PurchaseController;
+use App\Http\Controllers\ItemController;
 use Illuminate\Support\Facades\Route;
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,6 +16,28 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::middleware('auth')->group(function () {
+    Route::middleware(['clear.session'])->group(function () {
+        Route::post('/purchase/buy', [PurchaseController::class, 'buy']);
+        Route::get('/item/favorite/{item_id}', [ItemController::class, 'favorite']);
+        Route::post('/item/comment', [ItemController::class, 'comment']);
+        Route::get('/sell', [SellController::class, 'sell']);
+        Route::post('/sell/create', [SellController::class, 'store']);
+        Route::get('/mypage', [UserController::class, 'index']);
+        Route::get('/mypage/profile', [UserController::class, 'edit']);
+        Route::patch('/mypage/profile/update', [UserController::class, 'update']);
+        Route::get('/logout', [UserController::class, 'logout'])->name('logout');
+    });
+    Route::post('/purchase/address/update', [PurchaseController::class, 'update']);
+    Route::get('/purchase/address', [PurchaseController::class, 'edit']);
+    Route::post('/purchase/address', [PurchaseController::class, 'edit']);
+    Route::get('/purchase/{item_id}', [PurchaseController::class, 'purchase'])->name('purchase');
+});
+
+Route::prefix('/')->group(function () {
+    Route::get('/', [ItemController::class, 'index']);
+    Route::post('/', [ItemController::class, 'index']);
+    Route::middleware(['clear.session'])->group(function () {
+        Route::get('/item/{item_id}', [ItemController::class, 'show']);
+    });
 });

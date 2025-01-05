@@ -1,2 +1,9 @@
 *
+!default
+!default/items
+!default/items/
+!default/users
+!default/users/
+!images
+!temp/
 !.gitignore

@@ -1,0 +1,34 @@
+<?php
+
+namespace App\Actions\Fortify;
+
+use App\Models\User;
+use App\Http\Requests\RegisterRequest;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
+use Laravel\Fortify\Contracts\CreatesNewUsers;
+
+class CreateNewUser implements CreatesNewUsers
+{
+    use PasswordValidationRules;
+
+    /**
+     * Validate and create a newly registered user.
+     *
+     * @param  array<string, string>  $input
+     */
+    public function create(array $input): User
+    {
+        // リクエストクラスをインスタンス化してバリデーションを実行
+        $request = app(RegisterRequest::class); // コンテナ経由で解決
+        $request->merge($input); // 配列データをリクエストにマージ
+        $request->validateResolved(); // バリデーション実行
+
+        return User::create([
+            'name' => $input['name'],
+            'email' => $input['email'],
+            'password' => Hash::make($input['password']),
+        ]);
+    }
+}

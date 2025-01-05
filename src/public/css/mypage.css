@@ -1,0 +1,32 @@
+.profile__group {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 800px;
+  margin: 0px auto 20px auto;
+}
+
+.profile__image {
+  width: 150px;
+  margin: 20px;
+  height: 150px;
+  object-fit: contain;
+  background-color: #e0e0e0;
+  border-radius: 50%;
+}
+
+.profile__label {
+  margin: 0px 180px 0px 0px;
+  font-size: large;
+  font-weight: bold;
+}
+
+.profile__link {
+  padding: 5px 10px;
+  background-color: #ffffff;
+  border: 1px #f05454 solid;
+  border-radius: 5px;
+  color: #f05454;
+  font-size: large;
+  text-decoration: none;
+}
