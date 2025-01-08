@@ -18,22 +18,25 @@ use App\Http\Controllers\CustomAuthenticatedSessionController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
+//Fortify カスタマイズログイン
 Route::get('/login', [CustomAuthenticatedSessionController::class, 'create'])
     ->middleware('guest')
     ->name('login');
 Route::post('/login', [CustomAuthenticatedSessionController::class, 'store']);
 
+//未認証ユーザー
 Route::prefix('/')->group(function () {
     Route::get('/', [ItemController::class, 'index']);
     Route::post('/', [ItemController::class, 'index']);
+    //検索情報の消去
     Route::middleware(['clear.session'])->group(function () {
         Route::get('/item/{item_id}', [ItemController::class, 'show']);
     });
 });
 
+//認証ユーザー
 Route::middleware('auth')->group(function () {
-
+    //検索情報の消去
     Route::middleware(['clear.session'])->group(function () {
         Route::post('/purchase/buy', [PurchaseController::class, 'buy']);
         Route::get('/item/favorite/{item_id}', [ItemController::class, 'favorite']);
@@ -43,12 +46,12 @@ Route::middleware('auth')->group(function () {
         Route::get('/mypage', [UserController::class, 'index']);
         Route::get('/mypage/profile', [UserController::class, 'edit']);
         Route::patch('/mypage/profile/update', [UserController::class, 'update']);
+        Route::patch('/purchase/address/update', [PurchaseController::class, 'update']);
+        Route::get('/purchase/address', [PurchaseController::class, 'edit']);
+        Route::post('/purchase/address', [PurchaseController::class, 'edit']);
+        Route::get('/purchase/{item_id}', [PurchaseController::class, 'purchase'])->name('purchase');
         Route::get('/logout', [UserController::class, 'logout'])->name('logout');
     });
-    Route::post('/purchase/address/update', [PurchaseController::class, 'update']);
-    Route::get('/purchase/address', [PurchaseController::class, 'edit']);
-    Route::post('/purchase/address', [PurchaseController::class, 'edit']);
-    Route::get('/purchase/{item_id}', [PurchaseController::class, 'purchase'])->name('purchase');
 });
 
 

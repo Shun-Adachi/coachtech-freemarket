@@ -21,9 +21,13 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'post_code',
-        'address',
-        'building',
+        'current_post_code',
+        'current_address',
+        'current_building',
+        'shipping_post_code',
+        'shipping_address',
+        'shipping_building',
+        'payment_method_id',
         'thumbnail_path',
     ];
 

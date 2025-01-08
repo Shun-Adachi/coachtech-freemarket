@@ -27,8 +27,18 @@ class CustomAuthenticatedSessionController extends Controller
 
     public function store(LoginRequest $request)
     {
-        $credentials = $request->only(['email', 'password']);
-        $user = User::where('email', $credentials['email'])->first();
+        $user = User::where('email', $request->login)->orWhere('name', $request->login)->first();
+
+        if (!$user) {
+            throw ValidationException::withMessages([
+                'login' => ['ユーザー名またはメールアドレスが見つかりません。'],
+            ]);
+        }
+        $credentials = [
+            'email' => $user->email,
+            'password' => $request->password,
+        ];
+
         if (!$user || !Auth::validate($credentials)) {
             throw ValidationException::withMessages([
                 'password' => ['パスワードが間違っています'],
@@ -42,7 +52,7 @@ class CustomAuthenticatedSessionController extends Controller
 
         // 認証メールを送信
         Mail::send('emails.login', ['token' => $token], function ($message) use ($user) {
-            $message->to($user->email)->subject('Login Verification');
+            $message->to($user->email)->subject('【coachtechフリマ】認証ログイン');
         });
 
         return redirect()->route('login')->withInput()->with('message', 'ログインメールを送信しました');

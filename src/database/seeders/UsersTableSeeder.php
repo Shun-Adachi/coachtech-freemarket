@@ -19,9 +19,13 @@ class UsersTableSeeder extends Seeder
             'name' => '管理者',
             'email' => 'root@root',
             'password' => Hash::make('rootroot'),
-            'post_code' => '000-0000',
-            'address' => '東京都',
-            'building' => '',
+            'current_post_code' => '000-0000',
+            'current_address' => '東京都',
+            'current_building' => '',
+            'shipping_post_code' => '000-0000',
+            'shipping_address' => '東京都',
+            'shipping_building' => '',
+            'payment_method_id' => '1',
             'email' => 'root@root',
             'thumbnail_path' => '/default/users/admin.jpg'
         ];
@@ -31,9 +35,13 @@ class UsersTableSeeder extends Seeder
             'name' => 'テスト五郎',
             'email' => 'test@test',
             'password' => Hash::make('testtest'),
-            'post_code' => '001-0001',
-            'address' => '愛知県',
-            'building' => 'テストビル',
+            'current_post_code' => '001-0001',
+            'current_address' => '愛知県',
+            'current_building' => 'テストビル',
+            'shipping_post_code' => '001-0001',
+            'shipping_address' => '愛知県',
+            'shipping_building' => 'テストビル',
+            'payment_method_id' => '1',
             'thumbnail_path' => '/default/users/testgoro.jpg'
         ];
         DB::table('users')->insert($param);
@@ -42,9 +50,13 @@ class UsersTableSeeder extends Seeder
             'name' => 'hoge',
             'email' => 'hoge@hoge',
             'password' => Hash::make('hogehoge'),
-            'post_code' => '111-1111',
-            'address' => '大阪府',
-            'building' => 'サンプル101',
+            'current_post_code' => '111-1111',
+            'current_address' => '大阪府',
+            'current_building' => 'サンプル101',
+            'shipping_post_code' => '111-1111',
+            'shipping_address' => '大阪府',
+            'shipping_building' => 'サンプル101',
+            'payment_method_id' => '1',
             'thumbnail_path' => NULL
         ];
         DB::table('users')->insert($param);

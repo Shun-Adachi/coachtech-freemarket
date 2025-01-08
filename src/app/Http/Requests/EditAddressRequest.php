@@ -24,17 +24,17 @@ class EditAddressRequest extends FormRequest
     public function rules()
     {
         return [
-            'post_code' => 'required | regex:/^\d{3}-\d{4}$/',
-            'address' => 'required',
+            'shipping_post_code' => 'required | regex:/^\d{3}-\d{4}$/',
+            'shipping_address' => 'required',
         ];
     }
 
     public function messages()
     {
         return [
-            'post_code.required' => '郵便番号を入力してください',
-            'post_code.regex' => '郵便番号は8文字(ハイフンあり)の形で入力してください',
-            'address.required' => '住所を入力してください',
+            'shipping_post_code.required' => '郵便番号を入力してください',
+            'shipping_post_code.regex' => '郵便番号は8文字(ハイフンあり)の形で入力してください',
+            'shipping_address.required' => '住所を入力してください',
         ];
     }
 }

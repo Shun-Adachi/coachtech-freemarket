@@ -55,15 +55,16 @@ class ItemController extends Controller
 
         // 商品詳細取得
         $item = Item::with(['user', 'condition'])->where('id', $item_id)->first();
+        $purchase =  Purchase::where('item_id', $item_id)->exists();
 
         // 円形式変換
         $item->price = '\\ ' . number_format($item->price);
 
         //お気に入り情報取得
         if ($user_id) {
-            $my_favorite_count = Favorite::where('item_id', $item_id)->where('user_id', $user_id)->count();
+            $is_my_favorite = Favorite::where('item_id', $item_id)->where('user_id', $user_id)->exists();
         } else {
-            $my_favorite_count = 0;
+            $is_my_favorite = false;
         }
 
         $favorites_count = Favorite::where('item_id', $item_id)->count();
@@ -75,11 +76,11 @@ class ItemController extends Controller
         //関連カテゴリー取得
         $item_categories = CategoryItem::with('category')->where('item_id', $item_id)->get();
 
-        return view('item', compact('item', 'my_favorite_count', 'favorites_count', 'comments', 'comments_count', 'item_categories'));
+        return view('item', compact('item', 'purchase', 'is_my_favorite', 'favorites_count', 'comments', 'comments_count', 'item_categories'));
     }
 
     // お気に入り登録・解除処理
-    public function favorite(Request $request, $item_id)
+    public function favorite($item_id)
     {
         //お気に入り情報取得
         $user = Auth::user();

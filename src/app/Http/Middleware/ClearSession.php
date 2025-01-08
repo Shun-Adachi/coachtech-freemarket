@@ -16,7 +16,7 @@ class ClearSession
      */
     public function handle($request, Closure $next)
     {
-        session()->forget(['keyword', 'shipping_address', 'update_address_message']);
+        session()->forget(['keyword']);
         return $next($request);
     }
 }

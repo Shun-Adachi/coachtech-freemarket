@@ -5,6 +5,7 @@
 }
 
 .user-form__heading {
+  margin-top: 0px;
   padding: 20px 0px;
   text-align: center;
 }

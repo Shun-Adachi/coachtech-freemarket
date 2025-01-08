@@ -68,18 +68,32 @@ class UserController extends Controller
         //更新処理
         $update_data = [
             'name' => $request->input(['name']),
-            'post_code' => $request->input(['post_code']),
-            'address' => $request->input(['address']),
-            'building' => $request->input(['building']),
+            'current_post_code' => $request->input(['current_post_code']),
+            'current_address' => $request->input(['current_address']),
+            'current_building' => $request->input(['current_building']),
             'thumbnail_path' => $thumbnail_path,
         ];
-        User::find($request->id)->update($update_data);
+
+        //初回ログイン時の処理
+        if (($user->current_post_code === $user->shipping_post_code) &&
+            ($user->current_address === $user->shipping_address) &&
+            ($user->current_building === $user->shipping_building)
+        ) {
+            $shipping_data = [
+                'shipping_post_code' => $request->input(['current_post_code']),
+                'shipping_address' => $request->input(['current_address']),
+                'shipping_building' => $request->input(['current_building']),
+            ];
+            $update_data = array_merge($update_data, $shipping_data);
+        }
+
+        User::where('id', $request->id)->update($update_data);
 
         return redirect('/mypage')->with('message', 'プロフィールが更新されました');
     }
 
     // ログアウト処理
-    public function logout(Request $request)
+    public function logout()
     {
         Auth::logout();
         return redirect('/')->with('message', 'ログアウトしました');
