@@ -17,7 +17,7 @@ class UsersTableSeeder extends Seeder
     {
         $param = [
             'name' => '管理者',
-            'email' => 'root@root',
+            'email' => 'root@example.com',
             'password' => Hash::make('rootroot'),
             'current_post_code' => '000-0000',
             'current_address' => '東京都',
@@ -33,7 +33,7 @@ class UsersTableSeeder extends Seeder
 
         $param = [
             'name' => 'テスト五郎',
-            'email' => 'test@test',
+            'email' => 'test@example.com',
             'password' => Hash::make('testtest'),
             'current_post_code' => '001-0001',
             'current_address' => '愛知県',
@@ -48,7 +48,7 @@ class UsersTableSeeder extends Seeder
 
         $param = [
             'name' => 'hoge',
-            'email' => 'hoge@hoge',
+            'email' => 'hoge@example.com',
             'password' => Hash::make('hogehoge'),
             'current_post_code' => '111-1111',
             'current_address' => '大阪府',

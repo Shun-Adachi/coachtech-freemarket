@@ -4,11 +4,8 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\SellController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\ItemController;
-use App\Http\Controllers\StripeController;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Http\Request;
-use App\Models\User;
 use App\Http\Controllers\CustomAuthenticatedSessionController;
+use Illuminate\Support\Facades\Route;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -55,10 +52,3 @@ Route::middleware('auth')->group(function () {
         Route::get('/logout', [UserController::class, 'logout'])->name('logout');
     });
 });
-
-//Stripe決済
-Route::get('/checkout', [StripeController::class, 'checkout'])->name('checkout');
-Route::post('/payment', [StripeController::class, 'payment'])->name('payment');
-Route::post('/checkout-session', [StripeController::class, 'createCheckoutSession'])->name('checkout.session');
-Route::get('/checkout-success', [StripeController::class, 'success'])->name('checkout-success');
-Route::get('/checkout-cancel', [StripeController::class, 'cancel'])->name('checkout-cancel');

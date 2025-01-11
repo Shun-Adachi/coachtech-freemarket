@@ -20,7 +20,7 @@ class CommentFactory extends Factory
         $user = User::where('id', '!=', $item->user_id)->inRandomOrder()->first();
 
         return [
-            'comment' => $this->faker->sentence,
+            'comment' => $this->faker->text(255),
             'user_id' => $user->id,
             'item_id' => $item->id,
         ];

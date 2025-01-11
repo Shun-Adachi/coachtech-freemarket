@@ -12,17 +12,15 @@ use Illuminate\Http\Request;
 
 class CustomAuthenticatedSessionController extends Controller
 {
-    /**
-     * GET /login - ログインフォームを表示
-     */
+
+    // ログインフォームを表示
+
     public function create()
     {
         return view('auth.login');
     }
 
-    /**
-     * POST /login - ログイン処理
-     */
+    // ログイン処理
 
     public function store(LoginRequest $request)
     {
@@ -48,10 +46,7 @@ class CustomAuthenticatedSessionController extends Controller
         return redirect()->route('login')->withInput()->with('message', 'ログインメールを送信しました');
     }
 
-    /**
-     * GET /verify-login - 認証ログイン
-     */
-
+    // 認証ログイン
     public function verifyLogin(Request $request)
     {
         $token = $request->query('token');

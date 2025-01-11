@@ -15,7 +15,6 @@ use Stripe\Checkout\Session;
 
 class PurchaseController extends Controller
 {
-
     // 購入画面表示
     public function purchase(Request $request, $item_id)
     {
@@ -77,6 +76,7 @@ class PurchaseController extends Controller
     // 購入処理
     public function buy()
     {
+        $user = auth()->user();
         $requestData = session('request_data', []);
         $user = Auth::user();
         Purchase::create([
@@ -91,8 +91,12 @@ class PurchaseController extends Controller
         return redirect('/mypage')->with('message', '商品を購入しました');
     }
 
+    // Stripeセッション
     public function createCheckoutSession(PurchaseRequest $request)
     {
+        $user = auth()->user();
+        $item = Item::where('id', $request->item_id)->first();
+
         Stripe::setApiKey(config('services.stripe.secret'));
         try {
             $session = Session::create([
@@ -101,13 +105,14 @@ class PurchaseController extends Controller
                     'price_data' => [
                         'currency' => 'jpy',
                         'product_data' => [
-                            'name' => 'Test Product',
+                            'name' => $item->name,
                         ],
-                        'unit_amount' => 1000, // 金額（例：1000円）
+                        'unit_amount' => $item->price,
                     ],
                     'quantity' => 1,
                 ]],
                 'mode' => 'payment',
+                'customer_email' =>  $user->email,
                 'success_url' => url('/purchase/buy'),
                 'cancel_url' => url('/purchase/' . $request->item_id),
             ]);
@@ -116,7 +121,7 @@ class PurchaseController extends Controller
 
             return redirect($session->url);
         } catch (\Exception $e) {
-            return back()->with('error', 'Error creating Stripe Checkout session: ' . $e->getMessage());
+            return back()->with('error', 'チェックアウトセッションの生成に失敗しました ' . $e->getMessage());
         }
     }
 }
