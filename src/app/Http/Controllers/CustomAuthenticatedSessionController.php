@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
 use App\Models\User;
+use App\Http\Requests\LoginRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
-use App\Http\Requests\LoginRequest;
+use Illuminate\Http\Request;
 
 class CustomAuthenticatedSessionController extends Controller
 {
@@ -18,7 +17,7 @@ class CustomAuthenticatedSessionController extends Controller
      */
     public function create()
     {
-        return view('auth.login'); // ログインフォームビューを返す
+        return view('auth.login');
     }
 
     /**
@@ -27,17 +26,8 @@ class CustomAuthenticatedSessionController extends Controller
 
     public function store(LoginRequest $request)
     {
-        $user = User::where('email', $request->login)->orWhere('name', $request->login)->first();
-
-        if (!$user) {
-            throw ValidationException::withMessages([
-                'login' => ['ユーザー名またはメールアドレスが見つかりません。'],
-            ]);
-        }
-        $credentials = [
-            'email' => $user->email,
-            'password' => $request->password,
-        ];
+        $credentials = $request->only(['email', 'password']);
+        $user = User::where('email', $credentials['email'])->first();
 
         if (!$user || !Auth::validate($credentials)) {
             throw ValidationException::withMessages([
@@ -56,5 +46,26 @@ class CustomAuthenticatedSessionController extends Controller
         });
 
         return redirect()->route('login')->withInput()->with('message', 'ログインメールを送信しました');
+    }
+
+    /**
+     * GET /verify-login - 認証ログイン
+     */
+
+    public function verifyLogin(Request $request)
+    {
+        $token = $request->query('token');
+        $user = User::where('login_token', $token)->first();
+
+        if (!$user) {
+            return redirect('/login')->withErrors(['error' => 'ログインに失敗しました']);
+        }
+
+        // トークンを無効化し、ログイン
+        $user->login_token = null;
+        $user->save();
+        Auth::login($user);
+
+        return redirect('/')->with('message', 'ログインしました');
     }
 }

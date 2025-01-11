@@ -10,6 +10,8 @@ use App\Models\User;
 use App\Models\Purchase;
 use App\Http\Requests\EditAddressRequest;
 use App\Http\Requests\PurchaseRequest;
+use Stripe\Stripe;
+use Stripe\Checkout\Session;
 
 class PurchaseController extends Controller
 {
@@ -17,6 +19,10 @@ class PurchaseController extends Controller
     // 購入画面表示
     public function purchase(Request $request, $item_id)
     {
+        $request_data = session('request_data', []);
+        if ($request_data) {
+            echo $request_data['item_id'];
+        }
         $item = Item::where('id', $item_id)->first();
         $user = Auth::user();
         $payment_methods = PaymentMethod::get();
@@ -69,19 +75,48 @@ class PurchaseController extends Controller
     }
 
     // 購入処理
-    public function buy(PurchaseRequest $request)
+    public function buy()
     {
+        $requestData = session('request_data', []);
         $user = Auth::user();
-        // 商品購入データの保存
         Purchase::create([
             'user_id' => $user->id,
-            'item_id' => $request->item_id,
-            'payment_method_id' => $request->payment_method,
-            'shipping_post_code' => $request->shipping_post_code,
-            'shipping_address' => $request->shipping_address,
-            'shipping_building' => $request->shipping_building,
+            'item_id' => $requestData['item_id'],
+            'payment_method_id' => $requestData['payment_method'],
+            'shipping_post_code' => $requestData['shipping_post_code'],
+            'shipping_address' => $requestData['shipping_address'],
+            'shipping_building' => $requestData['shipping_building'],
         ]);
 
         return redirect('/mypage')->with('message', '商品を購入しました');
+    }
+
+    public function createCheckoutSession(PurchaseRequest $request)
+    {
+        Stripe::setApiKey(config('services.stripe.secret'));
+        try {
+            $session = Session::create([
+                'payment_method_types' => ['card'],
+                'line_items' => [[
+                    'price_data' => [
+                        'currency' => 'jpy',
+                        'product_data' => [
+                            'name' => 'Test Product',
+                        ],
+                        'unit_amount' => 1000, // 金額（例：1000円）
+                    ],
+                    'quantity' => 1,
+                ]],
+                'mode' => 'payment',
+                'success_url' => url('/purchase/buy'),
+                'cancel_url' => url('/purchase/' . $request->item_id),
+            ]);
+
+            session()->put('request_data', $request->all());
+
+            return redirect($session->url);
+        } catch (\Exception $e) {
+            return back()->with('error', 'Error creating Stripe Checkout session: ' . $e->getMessage());
+        }
     }
 }

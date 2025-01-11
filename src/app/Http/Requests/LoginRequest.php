@@ -26,7 +26,7 @@ class LoginRequest extends FortifyLoginRequest
     {
         return
             [
-                'login' => ['required', 'string'],
+                'email' => ['required', 'string', 'email', 'max:255', 'exists:users,email'],
                 'password' => ['required', 'string', 'min:8'],
             ];
     }
@@ -34,7 +34,9 @@ class LoginRequest extends FortifyLoginRequest
     public function messages()
     {
         return [
-            'login.required' => 'メールアドレスもしくはユーザー名を入力してください',
+            'email.required' => 'メールアドレスを入力してください',
+            'email.email' => 'ユーザー名@ドメイン形式で入力してください',
+            'email.exists' => 'ログイン情報が登録されていません',
             'password.required' => 'パスワードを入力してください',
             'password.min' => 'パスワードは8文字以上で入力してください',
         ];

@@ -4,6 +4,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\SellController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\ItemController;
+use App\Http\Controllers\StripeController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use App\Models\User;
@@ -18,17 +19,17 @@ use App\Http\Controllers\CustomAuthenticatedSessionController;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
 //Fortify カスタマイズログイン
-Route::get('/login', [CustomAuthenticatedSessionController::class, 'create'])
-    ->middleware('guest')
-    ->name('login');
+Route::get('/login', [CustomAuthenticatedSessionController::class, 'create'])->middleware('guest')->name('login');
 Route::post('/login', [CustomAuthenticatedSessionController::class, 'store']);
+Route::get('/verify-login', [CustomAuthenticatedSessionController::class, 'verifyLogin']);
 
 //未認証ユーザー
 Route::prefix('/')->group(function () {
     Route::get('/', [ItemController::class, 'index']);
     Route::post('/', [ItemController::class, 'index']);
-    //検索情報の消去
+    //セッションのクリア
     Route::middleware(['clear.session'])->group(function () {
         Route::get('/item/{item_id}', [ItemController::class, 'show']);
     });
@@ -36,9 +37,9 @@ Route::prefix('/')->group(function () {
 
 //認証ユーザー
 Route::middleware('auth')->group(function () {
-    //検索情報の消去
+    Route::get('/purchase/buy', [PurchaseController::class, 'buy']);
+    //セッションのクリア
     Route::middleware(['clear.session'])->group(function () {
-        Route::post('/purchase/buy', [PurchaseController::class, 'buy']);
         Route::get('/item/favorite/{item_id}', [ItemController::class, 'favorite']);
         Route::post('/item/comment', [ItemController::class, 'comment']);
         Route::get('/sell', [SellController::class, 'sell']);
@@ -46,6 +47,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/mypage', [UserController::class, 'index']);
         Route::get('/mypage/profile', [UserController::class, 'edit']);
         Route::patch('/mypage/profile/update', [UserController::class, 'update']);
+        Route::post('/purchase/checkout', [PurchaseController::class, 'createCheckoutSession'])->name('checkout.session');
         Route::patch('/purchase/address/update', [PurchaseController::class, 'update']);
         Route::get('/purchase/address', [PurchaseController::class, 'edit']);
         Route::post('/purchase/address', [PurchaseController::class, 'edit']);
@@ -54,21 +56,9 @@ Route::middleware('auth')->group(function () {
     });
 });
 
-
-Route::get('/verify-login', function (Request $request) {
-    $token = $request->query('token');
-
-    $user = User::where('login_token', $token)->first();
-
-    if (!$user) {
-        return redirect('/login')->withErrors(['error' => 'ログインに失敗しました']);
-    }
-
-    // トークンを無効化し、ログイン
-    $user->login_token = null;
-    $user->save();
-
-    Auth::login($user);
-
-    return redirect('/')->with('message', 'ログインしました');
-});
+//Stripe決済
+Route::get('/checkout', [StripeController::class, 'checkout'])->name('checkout');
+Route::post('/payment', [StripeController::class, 'payment'])->name('payment');
+Route::post('/checkout-session', [StripeController::class, 'createCheckoutSession'])->name('checkout.session');
+Route::get('/checkout-success', [StripeController::class, 'success'])->name('checkout-success');
+Route::get('/checkout-cancel', [StripeController::class, 'cancel'])->name('checkout-cancel');

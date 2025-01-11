@@ -17,6 +17,7 @@ class ClearSession
     public function handle($request, Closure $next)
     {
         session()->forget(['keyword']);
+        session()->forget(['request_data']);
         return $next($request);
     }
 }
