@@ -4,6 +4,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\SellController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\ItemController;
+use App\Http\Controllers\CustomAuthenticatedSessionController;
 use Illuminate\Support\Facades\Route;
 /*
 |--------------------------------------------------------------------------
@@ -16,9 +17,26 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth')->group(function () {
+//Fortify カスタマイズログイン
+Route::get('/login', [CustomAuthenticatedSessionController::class, 'create'])->middleware('guest')->name('login');
+Route::post('/login', [CustomAuthenticatedSessionController::class, 'store']);
+Route::get('/verify-login', [CustomAuthenticatedSessionController::class, 'verifyLogin']);
+
+//未認証ユーザー
+Route::prefix('/')->group(function () {
+    Route::get('/', [ItemController::class, 'index']);
+    Route::post('/', [ItemController::class, 'index']);
+    //セッションのクリア
     Route::middleware(['clear.session'])->group(function () {
-        Route::post('/purchase/buy', [PurchaseController::class, 'buy']);
+        Route::get('/item/{item_id}', [ItemController::class, 'show']);
+    });
+});
+
+//認証ユーザー
+Route::middleware('auth')->group(function () {
+    Route::get('/purchase/buy', [PurchaseController::class, 'buy']);
+    //セッションのクリア
+    Route::middleware(['clear.session'])->group(function () {
         Route::get('/item/favorite/{item_id}', [ItemController::class, 'favorite']);
         Route::post('/item/comment', [ItemController::class, 'comment']);
         Route::get('/sell', [SellController::class, 'sell']);
@@ -26,18 +44,11 @@ Route::middleware('auth')->group(function () {
         Route::get('/mypage', [UserController::class, 'index']);
         Route::get('/mypage/profile', [UserController::class, 'edit']);
         Route::patch('/mypage/profile/update', [UserController::class, 'update']);
+        Route::post('/purchase/checkout', [PurchaseController::class, 'createCheckoutSession'])->name('checkout.session');
+        Route::patch('/purchase/address/update', [PurchaseController::class, 'update']);
+        Route::get('/purchase/address', [PurchaseController::class, 'edit']);
+        Route::post('/purchase/address', [PurchaseController::class, 'edit']);
+        Route::get('/purchase/{item_id}', [PurchaseController::class, 'purchase'])->name('purchase');
         Route::get('/logout', [UserController::class, 'logout'])->name('logout');
-    });
-    Route::post('/purchase/address/update', [PurchaseController::class, 'update']);
-    Route::get('/purchase/address', [PurchaseController::class, 'edit']);
-    Route::post('/purchase/address', [PurchaseController::class, 'edit']);
-    Route::get('/purchase/{item_id}', [PurchaseController::class, 'purchase'])->name('purchase');
-});
-
-Route::prefix('/')->group(function () {
-    Route::get('/', [ItemController::class, 'index']);
-    Route::post('/', [ItemController::class, 'index']);
-    Route::middleware(['clear.session'])->group(function () {
-        Route::get('/item/{item_id}', [ItemController::class, 'show']);
     });
 });

@@ -18,21 +18,21 @@
     <p class="item-information__label--price">{{$item->price}}</p>
     <div class="item-icon">
       <div class="item-icon__group">
-        <a class="item-icon__link" href="{{'/item/favorite/' . $item->id}}">
-          @if($my_favorite_count===0)
-          <img class="item-icon__image" src="/images/favorite-inactive.png" />
-          @else
-          <img class="item-icon__image" src="/images/favorite-active.png" />
-          @endif
+        <a class="item-icon__link--{{$purchase ? 'inactive' : 'active'}}" href="{{'/item/favorite/' . $item->id}}">
+          <img class="item-icon__image" src="/images/favorite-{{$is_my_favorite ? 'active' : 'inactive'}}.png" />
         </a>
         <p class="item-icon__label">{{$favorites_count}}</p>
       </div>
-      <div class="item-icon__group">
+      <div class=" item-icon__group">
         <img class="item-icon__image" src="/images/comment.svg" />
         <p class="item-icon__label">{{$comments_count}}</p>
       </div>
     </div>
-    <a class="item-form__link" href="{{'/purchase/' . $item->id}}">購入手続きへ</a>
+    @if($purchase)
+    <a class="item-form__link--inactive">購入手続きへ</a>
+    @else
+    <a class="item-form__link--active" href="{{'/purchase/' . $item->id}}">購入手続きへ</a>
+    @endif
     <!-- 説明 -->
     <h3 class="item-information__sub-heading">商品説明</h3>
     <p class="item-information__label__description">
@@ -64,7 +64,7 @@
           src="{{ $comment->user->thumbnail_path ? asset('storage/' . $comment->user->thumbnail_path) : '/images/default-profile.png'}}">
         <p class="item-comment__user-name">{{$comment->user->name}}</p>
       </div>
-      <p class="item-comment__text">{{$comment->comment}}</p>
+      <p class="item-comment__text">{!! nl2br($comment->comment) !!}</p>
       @endforeach
       @if($comments_count === 0)
       <div class="item-comment__user-group">
@@ -81,9 +81,9 @@
         {{ $message }}
         @enderror
       </p>
-      <input type="hidden" name="item_id" value={{$item->id}}>
+      <input type="hidden" name="item_id" value="{{$item->id}}">
       <textarea class="item-form__textarea" name="comment">{{ old('comment') }}</textarea>
-      <input class="item-form__button" type="submit" value="コメントを送信する">
+      <input class="item-form__button--{{$purchase ? 'inactive' : 'active'}}" type="submit" value="コメントを送信する">
     </form>
   </div>
 </div>

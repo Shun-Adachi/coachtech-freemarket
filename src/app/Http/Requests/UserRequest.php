@@ -25,8 +25,8 @@ class UserRequest extends FormRequest
     {
         $rules = [
             'name' => 'required',
-            'post_code' => 'required | regex:/^\d{3}-\d{4}$/',
-            'address' => 'required',
+            'current_post_code' => 'required | regex:/^\d{3}-\d{4}$/',
+            'current_address' => 'required',
         ];
 
         if (!$this->hasFile('image') && $this->temp_image) {
@@ -45,9 +45,9 @@ class UserRequest extends FormRequest
         return [
             'image.mimes' => '画像ファイルはJPEGもしくはPNG形式を選択してください',
             'name.required' => 'ユーザー名を入力してください',
-            'post_code.required' => '郵便番号を入力してください',
-            'post_code.regex' => '郵便番号は8文字(ハイフンあり)の形で入力してください',
-            'address.required' => '住所を入力してください',
+            'current_post_code.required' => '郵便番号を入力してください',
+            'current_post_code.regex' => '郵便番号は8文字(ハイフンあり)の形で入力してください',
+            'current_address.required' => '住所を入力してください',
         ];
     }
 

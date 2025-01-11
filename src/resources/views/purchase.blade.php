@@ -6,7 +6,18 @@
 <link rel="stylesheet" href="{{ asset('css/purchase.css')}}">
 @endsection
 
+@section('script')
+<script src="https://js.stripe.com/v3/"></script>
+@endsection
+
 @section('content')
+<!-- Stripe メッセージ -->
+@if(session('success'))
+<p style="color: green;">{{ session('success') }}</p>
+@endif
+@if(session('error'))
+<p style="color: red;">{{ session('error') }}</p>
+@endif
 <div class="purchase-content">
   <form class="purchase-form" method="post">
     @csrf
@@ -16,20 +27,25 @@
         <input type="hidden" name="item_id" value="{{$item->id}}" />
         <img class="purchase-form__image" src="{{asset('storage/' . $item->image_path)}}">
         <div class="purchase-form__item-group">
-          <p class="purchase-form__item-text">{{$item->name}}</p>
-          <p class="purchase-form__item-text">{{$item->price}}</p>
+          <p class="purchase-form__text--item">{{$item->name}}</p>
+          <p class="purchase-form__text--item">{{$item->price}}</p>
         </div>
       </div>
       <!-- 支払方法 -->
       <div class="payment-method">
         <label class="purchase-form__label" for="payment_method">支払い方法</label>
         <select class="purchase-form__select" name="payment_method" id="payment_method">
-          <option value="" disabled selected>選択してください</option>
           @foreach($payment_methods as $payment_method)
-          @if(session('shipping_address.payment_method'))
-          <option value="{{$payment_method->id}}" {{session('shipping_address.payment_method') == $payment_method->id ? 'selected' : ''}}>{{$payment_method->name}}</option>
+          @if(old('payment_method'))
+          <option
+            value="{{$payment_method->id}}"
+            {{old('payment_method') == $payment_method->id ? 'selected' : ''}}>{{$payment_method->name}}
+          </option>
           @else
-          <option value="{{$payment_method->id}}" {{old('payment_method') == $payment_method->id ? 'selected' : ''}}>{{$payment_method->name}}</option>
+          <option
+            value="{{$payment_method->id}}"
+            {{$user->payment_method_id == $payment_method->id ? 'selected' : ''}}>{{$payment_method->name}}
+          </option>
           @endif
           @endforeach
         </select>
@@ -44,44 +60,39 @@
         <div class="purchase-address__group">
           <label class="purchase-form__label">
             配送先
-            @if (session('update_address_message'))
-            <span class="purchase-form__message">
-              {{session('update_address_message')}}
-            </span>
-            @endif
           </label>
           <div class="purchase-address__sub-group">
-            <p class="purchase-form__text">〒 </p>
+            <p class="purchase-form__text--address">〒 </p>
             <input class="purchase-form__input"
               type="text"
-              name="post_code"
-              value="{{session('shipping_address.post_code') ?? $user->post_code}}"
+              name="shipping_post_code"
+              value="{{$user->shipping_post_code}}"
               readonly />
           </div>
           <p class="purchase-form__error-message">
-            @error('post_code')
+            @error('shipping_post_code')
             {{ $message }}
             @enderror
           </p>
           <div class="purchase-address__sub-group">
-            <p class="purchase-form__text"></p>
+            <p class="purchase-form__text--address"></p>
             <input class="purchase-form__input"
               type="text"
-              name="address"
-              value="{{session('shipping_address.address') ?? $user->address}}"
+              name="shipping_address"
+              value="{{$user->shipping_address}}"
               readonly />
           </div>
           <p class="purchase-form__error-message">
-            @error('address')
+            @error('shipping_address')
             {{ $message }}
             @enderror
           </p>
           <div class="purchase-address__sub-group">
-            <p class="purchase-form__text"></p>
+            <p class="purchase-form__text--address"></p>
             <input class="purchase-form__input"
               type="text"
-              name="building"
-              value="{{session('shipping_address') ? session('shipping_address.building') : $user->building}}"
+              name="shipping_building"
+              value="{{$user->shipping_building}}"
               readonly />
           </div>
         </div>
@@ -100,7 +111,7 @@
           <td class="purchase-form__cell" name="payment_method_text">コンビニ払い</td>
         </tr>
       </table>
-      <button class="purchase-form__button" type="submit" formaction="/purchase/buy">購入する</button>
+      <button class="purchase-form__button--{{$purchase ? 'inactive' : 'active'}}" type="submit" formaction="/purchase/checkout">購入する</button>
     </div>
   </form>
 </div>

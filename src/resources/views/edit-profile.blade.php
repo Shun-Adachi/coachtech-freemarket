@@ -49,26 +49,26 @@
       </p>
     </div>
     <div class="user-form__group">
-      <label class="user-form__label" for="post_code">郵便番号</label>
-      <input class="user-form__input" type="text" name="post_code" id="post_code" value="{{ old('post_code') ?? $user->post_code}}">
+      <label class="user-form__label" for="current_post_code">郵便番号</label>
+      <input class="user-form__input" type="text" name="current_post_code" id="current_post_code" value="{{ old('current_post_code') ?? $user->current_post_code}}">
       <p class="user-form__error-message">
-        @error('post_code')
+        @error('current_post_code')
         {{ $message }}
         @enderror
       </p>
     </div>
     <div class="user-form__group">
-      <label class="user-form__label" for="address">住所</label>
-      <input class="user-form__input" type="text" name="address" id="address" value="{{ old('address') ?? $user->address}}">
+      <label class="user-form__label" for="current_address">住所</label>
+      <input class="user-form__input" type="text" name="current_address" id="current_address" value="{{ old('current_address') ?? $user->current_address}}">
       <p class=" user-form__error-message">
-        @error('address')
+        @error('current_address')
         {{ $message }}
         @enderror
       </p>
     </div>
     <div class="user-form__group">
-      <label class="user-form__label" for="building">建物名</label>
-      <input class="user-form__input" type="text" name="building" id="building" value="{{ old('building') ?? $user->building}}">
+      <label class="user-form__label" for="current_building">建物名</label>
+      <input class="user-form__input" type="text" name="current_building" id="current_building" value="{{ old('current_building') ?? $user->current_building}}">
     </div>
     <div class="user-form__group">
 
