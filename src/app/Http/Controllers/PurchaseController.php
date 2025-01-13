@@ -10,20 +10,23 @@ use App\Models\User;
 use App\Models\Purchase;
 use App\Http\Requests\EditAddressRequest;
 use App\Http\Requests\PurchaseRequest;
-use Stripe\Stripe;
-use Stripe\Checkout\Session;
+use Stripe\StripeClient;
+use Illuminate\Support\Facades\Log;
 
 class PurchaseController extends Controller
 {
+    protected $stripeClient;
+
+    public function __construct(StripeClient $stripeClient)
+    {
+        $this->stripeClient = $stripeClient;
+    }
+
     // 購入画面表示
     public function purchase(Request $request, $item_id)
     {
-        $request_data = session('request_data', []);
-        if ($request_data) {
-            echo $request_data['item_id'];
-        }
         $item = Item::where('id', $item_id)->first();
-        $user = Auth::user();
+        $user = User::findOrFail(Auth::id());
         $payment_methods = PaymentMethod::get();
         $purchase =  Purchase::where('item_id', $item_id)->exists();
 
@@ -97,9 +100,11 @@ class PurchaseController extends Controller
         $user = auth()->user();
         $item = Item::where('id', $request->item_id)->first();
 
-        Stripe::setApiKey(config('services.stripe.secret'));
+        //Stripe::setApiKey(config('services.stripe.secret'));
         try {
-            $session = Session::create([
+
+            Log::info('Session URL1:');
+            $session = $this->stripeClient->checkout->sessions->create([
                 'payment_method_types' => ['card'],
                 'line_items' => [[
                     'price_data' => [
@@ -119,6 +124,7 @@ class PurchaseController extends Controller
 
             session()->put('request_data', $request->all());
 
+            Log::info('Session URL2:', ['url' => $session->url]);
             return redirect($session->url);
         } catch (\Exception $e) {
             return back()->with('error', 'チェックアウトセッションの生成に失敗しました ' . $e->getMessage());

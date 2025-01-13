@@ -26,7 +26,6 @@ class UsersTableSeeder extends Seeder
             'shipping_address' => '東京都',
             'shipping_building' => '',
             'payment_method_id' => '1',
-            'email' => 'root@root',
             'thumbnail_path' => '/default/users/admin.jpg'
         ];
         DB::table('users')->insert($param);

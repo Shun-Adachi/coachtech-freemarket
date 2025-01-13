@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Http\Requests\LoginRequest;
+use App\Mail\LoginNotification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Mail;
@@ -39,9 +40,7 @@ class CustomAuthenticatedSessionController extends Controller
         $user->save();
 
         // 認証メールを送信
-        Mail::send('emails.login', ['token' => $token], function ($message) use ($user) {
-            $message->to($user->email)->subject('【coachtechフリマ】認証ログイン');
-        });
+        Mail::to($user->email)->send(new LoginNotification($token));
 
         return redirect()->route('login')->withInput()->with('message', 'ログインメールを送信しました');
     }

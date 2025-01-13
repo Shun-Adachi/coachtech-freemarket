@@ -91,7 +91,6 @@ php artisan db:seed
 
 プロジェクトのER図は以下の通りです。
 
-
 ## ユースケース図
 
 プロジェクトのユースケース図は以下の通りです。
@@ -105,5 +104,26 @@ php artisan db:seed
   | React      | 17.0       | フロントエンド   |
   | PostgreSQL | 13         | データベース     |
 
-
 </details>
+
+## テスト
+
+mysql -u root -p
+CREATE DATABASE test;
+SHOW DATABASES;
+GRANT ALL PRIVILEGES ON test.* TO 'laravel_user'@'%';
+FLUSH PRIVILEGES;
+SHOW GRANTS FOR 'laravel_user'@'%';
+
+cp .env .env.testing
+APP_ENV=test
+APP_KEY=
+DB_DATABASE=test
+DB_USERNAME=root
+DB_PASSWORD=root
+php artisan key:generate --env=testing
+php artisan config:clear
+php artisan migrate --env=testing
+php artisan db:seed --env=testing
+
+php artisan test --filter=RegisterTest

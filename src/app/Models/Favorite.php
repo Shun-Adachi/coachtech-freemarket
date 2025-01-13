@@ -12,4 +12,16 @@ class Favorite extends Model
         'user_id',
         'item_id',
     ];
+
+    // FaivoriteとItemのリレーション
+    public function Item()
+    {
+        return $this->belongsTo(Item::class);
+    }
+
+    // FaivoriteとUserのリレーション
+    public function User()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
