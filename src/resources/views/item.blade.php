@@ -41,7 +41,7 @@
     <!-- 詳細説明 -->
     <h2 class="item-information__sub-heading">商品の情報</h2>
     <div class="item-category">
-      <h4 class="item-category__heading">カテゴリー</h4>
+      <h3 class="item-category__heading">カテゴリー</h3>
       <div class="item-category__group">
         @foreach ($itemCategories as $itemCategory)
         <p class="item-category__label">{{$itemCategory->category->name}}</p>
@@ -49,7 +49,7 @@
       </div>
     </div>
     <div class="item-condition">
-      <h4 class="item-condition__heading">商品の状態</h4>
+      <h3 class="item-condition__heading">商品の状態</h3>
       <div class="item-condition__group">
         <p class="item-condition__label">{{$item->condition->name}}</p>
       </div>
