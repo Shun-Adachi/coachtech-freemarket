@@ -12,4 +12,10 @@ class Category extends Model
     protected $fillable = [
         'name',
     ];
+
+    //ItemとCategoryのリレーション
+    public function Item()
+    {
+        return $this->belongsTo(Item::class);
+    }
 }

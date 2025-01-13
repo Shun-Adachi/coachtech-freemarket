@@ -29,6 +29,12 @@ class Item extends Model
         return $this->belongsTo(User::class);
     }
 
+    //ItemとCategoryのリレーション
+    public function Category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+
     //キーワード検索
     public function scopeKeywordSearch($query, $keyword)
     {
