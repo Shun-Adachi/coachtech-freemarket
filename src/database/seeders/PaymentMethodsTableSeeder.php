@@ -14,14 +14,6 @@ class PaymentMethodsTableSeeder extends Seeder
      */
     public function run()
     {
-        //DB::statement("ALTER TABLE payment_methods AUTO_INCREMENT = 1");
-
-
-        // テーブルをトランケート（データ削除 & AUTO_INCREMENTリセット）
-        //DB::statement('SET FOREIGN_KEY_CHECKS = 0');
-        //DB::table('payment_methods')->truncate();
-        //DB::statement('SET FOREIGN_KEY_CHECKS = 1');
-
         $param = [
             'name' => 'コンビニ払い',
         ];

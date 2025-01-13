@@ -15,7 +15,6 @@ class FavoriteFactory extends Factory
     {
         static $combinations = [];
         static $ensuredUserIds = [];
-        static $ensuredFavorites = false;
 
         // 確実にUser_idが1, 2, 3を含むようにする
         if (count($ensuredUserIds) < 3) {

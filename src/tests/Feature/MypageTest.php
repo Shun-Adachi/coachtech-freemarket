@@ -68,7 +68,6 @@ class MypageTest extends TestCase
      */
     public function test_profile_edit_page_displays_correct_initial_values()
     {
-
         $user = User::first();
         $this->actingAs($user);
         $response = $this->get('/mypage/profile');

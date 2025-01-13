@@ -9,7 +9,7 @@
 
 @section('content')
 <div class="user-form">
-  <h2 class="user-form__heading">プロフィール設定</h2>
+  <h1 class="user-form__heading">プロフィール設定</h1>
   <form class="user-form__form" action="/mypage/profile/update" method="post" enctype="multipart/form-data">
     @method('PATCH')
     @csrf

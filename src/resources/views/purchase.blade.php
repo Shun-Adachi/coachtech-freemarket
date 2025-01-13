@@ -35,7 +35,7 @@
       <div class="payment-method">
         <label class="purchase-form__label" for="payment_method">支払い方法</label>
         <select class="purchase-form__select" name="payment_method" id="payment_method">
-          @foreach($payment_methods as $payment_method)
+          @foreach($paymentMethods as $payment_method)
           @if(old('payment_method'))
           <option
             value="{{$payment_method->id}}"

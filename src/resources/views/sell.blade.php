@@ -8,7 +8,7 @@
 
 @section('content')
 <div class="sell-form">
-  <h2 class="sell-form__main-heading">商品の出品</h2>
+  <h1 class="sell-form__main-heading">商品の出品</h1>
   <form class="sell-form__form" action="/sell/create" method="post" enctype="multipart/form-data">
     @csrf
     <!-- 商品画像 -->
@@ -35,7 +35,7 @@
       </div>
     </div>
     <!-- 商品の詳細 -->
-    <h3 class=" sell-form__sub-heading">商品の詳細</h3>
+    <h2 class=" sell-form__sub-heading">商品の詳細</h2>
 
     <!-- カテゴリ -->
     <div class="sell-form__group">
@@ -80,7 +80,7 @@
       </select>
     </div>
     <!-- 商品名と説明 -->
-    <h3 class="sell-form__sub-heading">商品名と説明</h3>
+    <h2 class="sell-form__sub-heading">商品名と説明</h2>
     <!-- 商品名 -->
     <div class="sell-form__group">
       <label class="sell-form__label" for="name">商品名</label>

@@ -10,12 +10,12 @@
 @section('content')
 <div class="user-form">
   <!-- ヘッダー -->
-  <h2 class="user-form__heading">住所の変更</h2>
+  <h1 class="user-form__heading">住所の変更</h1>
   <!-- 入力フォーム -->
   <form class="user-form__form" action="/purchase/address/update" method="post">
     @method('PATCH')
     @csrf
-    <input type="hidden" name="item_id" value="{{old('item_id') ?? $item_id}}" />
+    <input type="hidden" name="item_id" value="{{old('item_id') ?? $itemId}}" />
     <div class="user-form__group">
       <label class="user-form__label" for="shipping_post_code">郵便番号</label>
       <input class="user-form__input" type="text" name="shipping_post_code" id="shippig_post_code" value="{{old('shipping_post_code') ?? $user->shipping_post_code}}" />
