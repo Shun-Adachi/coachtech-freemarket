@@ -81,6 +81,11 @@ class PurchaseController extends Controller
         $user = auth()->user();
         $requestData = session('request_data', []);
         $user = Auth::user();
+
+        if (!$requestData) {
+            return redirect('/mypage')->with('error', '決済情報が見つかりません');
+        }
+
         Purchase::create([
             'user_id' => $user->id,
             'item_id' => $requestData['item_id'],
