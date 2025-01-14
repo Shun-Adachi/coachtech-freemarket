@@ -11,8 +11,6 @@ use App\Models\Favorite;
 use App\Models\Comment;
 use App\Models\CategoryItem;
 
-use Illuminate\Support\Facades\Hash;
-
 class ItemTest extends TestCase
 {
     use RefreshDatabase;

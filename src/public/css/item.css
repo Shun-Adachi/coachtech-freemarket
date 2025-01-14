@@ -95,7 +95,10 @@
   font-size: 28px;
 }
 
-.item-information__label--description {}
+.item-information__label--description {
+  padding-left:10px;
+  font-size: large;
+}
 
 .item-category {
   display: flex;
@@ -179,6 +182,7 @@
   height: 150px;
   padding: 10px;
   border-radius: 5px;
+  font-size: large;
 }
 
 .item-form__button--active {

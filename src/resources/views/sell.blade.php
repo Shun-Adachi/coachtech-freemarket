@@ -110,7 +110,7 @@
         @enderror
       </p>
       <div class="sell-form__price-group">
-        <label class="sell-form__label--yen-mark" for="price">\</label>
+        <label class="sell-form__label--yen-mark" for="price">&yen;</label>
         <input class="sell-form__input--price" type="number" min="0" name="price" id="price" value="{{old('price')}}">
       </div>
     </div>

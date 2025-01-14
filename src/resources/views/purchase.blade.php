@@ -28,7 +28,7 @@
         <img class="purchase-form__image" src="{{asset('storage/' . $item->image_path)}}">
         <div class="purchase-form__item-group">
           <p class="purchase-form__text--item">{{$item->name}}</p>
-          <p class="purchase-form__text--item">{{$item->price}}</p>
+          <p class="purchase-form__text--item">&yen; {{$item->price}}</p>
         </div>
       </div>
       <!-- 支払方法 -->
@@ -104,7 +104,7 @@
       <table class="purchase-form__table">
         <tr class="purchase-form__row">
           <th class="purchase-form__cell">商品代金</th>
-          <td class="purchase-form__cell">{{$item->price}}</td>
+          <td class="purchase-form__cell">&yen; {{$item->price}}</td>
         </tr>
         <tr class=" purchase-form__row">
           <th class="purchase-form__cell">支払い方法</th>

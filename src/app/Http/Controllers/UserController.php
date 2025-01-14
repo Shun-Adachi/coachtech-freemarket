@@ -102,8 +102,11 @@ class UserController extends Controller
     //ユーザープロフィール画像削除
     public function deleteThumbnail($thumbnailPath)
     {
-        if ($thumbnailPath && Storage::disk('public')->exists($thumbnailPath)) {
-            Storage::disk('public')->delete($thumbnailPath);
+        $dummyDataDirectory = 'default/users/';
+        if ($thumbnailPath && !str_starts_with($thumbnailPath, $dummyDataDirectory)) {
+            if (Storage::disk('public')->exists($thumbnailPath)) {
+                Storage::disk('public')->delete($thumbnailPath);
+            }
         }
     }
 }

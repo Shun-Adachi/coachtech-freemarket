@@ -15,7 +15,7 @@
     <!-- 商品概要 -->
     <h1 class="item-information__main-heading">{{$item->name}}</h1>
     <p class="item-information__label--brand">{{$item->user->name}}</p>
-    <p class="item-information__label--price">{{$item->price}}</p>
+    <p class="item-information__label--price">&yen; {{$item->price}}</p>
     <div class="item-icon">
       <div class="item-icon__group">
         <a class="item-icon__link--{{$purchase ? 'inactive' : 'active'}}" href="{{'/item/favorite/' . $item->id}}">
@@ -35,8 +35,8 @@
     @endif
     <!-- 説明 -->
     <h2 class="item-information__sub-heading">商品説明</h2>
-    <p class="item-information__label__description">
-      {{$item->description}}
+    <p class="item-information__label--description">
+      {!! nl2br($item->description) !!}
     </p>
     <!-- 詳細説明 -->
     <h2 class="item-information__sub-heading">商品の情報</h2>

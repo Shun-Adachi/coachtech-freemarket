@@ -57,7 +57,7 @@ class ItemController extends Controller
         $purchase =  Purchase::where('item_id', $itemId)->exists();
 
         // 円形式変換
-        $item->price = '\\ ' . number_format($item->price);
+        $item->price = number_format($item->price);
 
         //お気に入り情報取得
         if ($userId) {

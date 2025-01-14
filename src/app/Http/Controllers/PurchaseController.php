@@ -30,7 +30,7 @@ class PurchaseController extends Controller
         $purchase =  Purchase::where('item_id', $itemId)->exists();
 
         // 円形式変換
-        $item->price = '\\ ' . number_format($item->price);
+        $item->price = number_format($item->price);
 
         return view('purchase', compact('user', 'item', 'paymentMethods', 'purchase'));
     }

@@ -26,7 +26,7 @@ class UsersTableSeeder extends Seeder
             'shipping_address' => '東京都',
             'shipping_building' => '',
             'payment_method_id' => '1',
-            'thumbnail_path' => '/default/users/admin.jpg'
+            'thumbnail_path' => 'default/users/admin.jpg'
         ];
         DB::table('users')->insert($param);
 
@@ -41,7 +41,7 @@ class UsersTableSeeder extends Seeder
             'shipping_address' => '愛知県',
             'shipping_building' => 'テストビル',
             'payment_method_id' => '1',
-            'thumbnail_path' => '/default/users/testgoro.jpg'
+            'thumbnail_path' => 'default/users/testgoro.jpg'
         ];
         DB::table('users')->insert($param);
 
