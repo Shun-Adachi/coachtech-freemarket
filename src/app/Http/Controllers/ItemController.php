@@ -17,7 +17,7 @@ class ItemController extends Controller
     // 商品一覧ページ表示
     public function index(Request $request)
     {
-        //ユーザー情報・タブ情報・検索取得
+        // ユーザー情報・タブ情報・検索取得
         $user = Auth::user();
         $userId = $user->id ?? null;
         $tab = $request->tab;
@@ -30,12 +30,12 @@ class ItemController extends Controller
             $keyword = "";
         }
 
-        //マイリスト
+        // マイリスト
         if ($tab === 'mylist') {
             $favoriteItemIds = Favorite::where('user_id', $userId)->pluck('item_id');
             $items = Item::whereIn('id', $favoriteItemIds)->KeywordSearch($keyword)->get();
         }
-        //商品一覧
+        // 商品一覧
         else {
             $items = Item::where('user_id', '!=', $userId)->KeywordSearch($keyword)->get();
         }
@@ -48,7 +48,7 @@ class ItemController extends Controller
     // 商品詳細ページ表示
     public function show(Request $request, $itemId)
     {
-        //ユーザー情報取得
+        // ユーザー情報取得
         $user = Auth::user();
         $userId = $user->id ?? null;
 
@@ -59,7 +59,7 @@ class ItemController extends Controller
         // 円形式変換
         $item->price = number_format($item->price);
 
-        //お気に入り情報取得
+        // お気に入り情報取得
         if ($userId) {
             $isFavorite = Favorite::where('item_id', $itemId)->where('user_id', $userId)->exists();
         } else {
@@ -68,11 +68,11 @@ class ItemController extends Controller
 
         $favoritesCount = Favorite::where('item_id', $itemId)->count();
 
-        //コメント数取得
+        // コメント数取得
         $comments = Comment::with('user')->where('item_id', $itemId)->get();
         $commentsCount = $comments->count();
 
-        //関連カテゴリー取得
+        // 関連カテゴリー取得
         $itemCategories = CategoryItem::with('category')->where('item_id', $itemId)->get();
 
         return view('item', compact('item', 'purchase', 'isFavorite', 'favoritesCount', 'comments', 'commentsCount', 'itemCategories'));
@@ -81,15 +81,15 @@ class ItemController extends Controller
     // お気に入り登録・解除処理
     public function favorite($itemId)
     {
-        //お気に入り情報取得
+        // お気に入り情報取得
         $user = Auth::user();
         $favorite = Favorite::where('item_id', $itemId)->where('user_id', $user->id)->first();
 
-        //解除
+        // 解除
         if ($favorite) {
             Favorite::find($favorite->id)->delete();
         }
-        //登録
+        // 登録
         else {
             $favorite = [
                 'user_id' => $user->id,

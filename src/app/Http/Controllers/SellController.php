@@ -51,6 +51,6 @@ class SellController extends Controller
             ]);
         }
 
-        return redirect('/mypage?tab=sell')->with('message', '商品を出品しました。');
+        return redirect('/mypage?tab=sell')->with('message', '商品を出品しました');
     }
 }

@@ -66,7 +66,7 @@ class PurchaseController extends Controller
             'shipping_building' => $request->shipping_building,
         ];
 
-        //変更なしの場合は更新処理およびメッセージなし
+        // 変更なしの場合は更新処理およびメッセージなし
         if ($currentUserData == $updateData) {
             return redirect()->route('purchase', ['item_id' => $request->item_id]);
         }
