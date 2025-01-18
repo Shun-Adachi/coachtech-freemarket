@@ -6,6 +6,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use App\Models\Item;
 use App\Models\User;
+use App\Models\Purchase;
 use App\Models\Favorite;
 
 class IndexTest extends TestCase
@@ -38,6 +39,29 @@ class IndexTest extends TestCase
     }
 
     /**
+     * 購入済み商品は「Sold」と表示される
+     *
+     * @return void
+     */
+    public function test_purchased_items_display_sold_label()
+    {
+        $user = User::first();
+        $item = Item::where('user_id', '!=', $user->id)->first();
+        // 購入済み商品のダミーデータを作成
+        Purchase::create([
+            'item_id' => $item->id,
+            'user_id' => $user->id,
+            'payment_method_id' => $user->payment_method_id,
+            'shipping_post_code' => $user->shipping_post_code,
+            'shipping_address' => $user->shipping_address,
+            'shipping_building' => $user->shipping_building,
+        ]);
+        $response = $this->get('/');
+        $response->assertStatus(200);
+        $response->assertSee('Sold');
+    }
+
+    /**
      * 自分が出品した商品は表示されない
      *
      * @return void
@@ -58,6 +82,32 @@ class IndexTest extends TestCase
     }
 
     /**
+     * マイリストで購入済み商品は「Sold」と表示される
+     *
+     * @return void
+     */
+    public function test_purchased_items_display_sold_label_in_mylyst()
+    {
+        $user = User::first();
+        $this->actingAs($user);
+        // いいねと商品情報を取得
+        $favorites = Favorite::where('user_id', $user->id)->pluck('item_id');
+        $item = Item::whereIn('id', $favorites)->first();
+        // 購入済み商品のダミーデータを作成
+        Purchase::create([
+            'item_id' => $item->id,
+            'user_id' => $user->id,
+            'payment_method_id' => $user->payment_method_id,
+            'shipping_post_code' => $user->shipping_post_code,
+            'shipping_address' => $user->shipping_address,
+            'shipping_building' => $user->shipping_building,
+        ]);
+        $response = $this->get('/?tab=mylist');
+        $response->assertStatus(200);
+        $response->assertSee('Sold');
+    }
+
+    /**
      * マイリストでいいねした商品だけが表示される
      *
      * @return void
@@ -67,7 +117,6 @@ class IndexTest extends TestCase
         $user = User::first();
         $this->actingAs($user);
         $response = $this->get('/?tab=mylist');
-
         $response->assertStatus(200);
 
         // いいねと商品情報を取得

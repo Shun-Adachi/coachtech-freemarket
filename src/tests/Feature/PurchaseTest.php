@@ -96,6 +96,60 @@ class PurchaseTest extends TestCase
         ]);
     }
 
+    /**
+     *  購入した商品は商品一覧画面にて「Sold」と表示される
+     *
+     * @return void
+     */
+    public function test_purchased_items_display_sold_label_with_correct_item_id()
+    {
+
+        $user = User::first();
+        $this->actingAs($user);
+        $item = Item::where('user_id', '!=', $user->id)->first();
+
+        // StripeClient のモック作成
+        $stripeMock = $this->getMockBuilder(StripeClient::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        // sessions のモック作成
+        $sessionsMock = $this->getMockBuilder(\stdClass::class)
+            ->addMethods(['create'])
+            ->getMock();
+        $sessionsMock->expects($this->once())
+            ->method('create')
+            ->willReturn((object) [
+                'id' => 'mock_session_id',
+                'url' => 'https://mock.stripe.url/checkout',
+            ]);
+        // checkout プロパティを直接モックとして設定
+        $stripeMock->checkout = (object) [
+            'sessions' => $sessionsMock,
+        ];
+
+        // モックをアプリケーションコンテナにバインド
+        $this->app->instance(StripeClient::class, $stripeMock);
+
+        // 商品購入ボタン押下
+        $formData = [
+            'item_id' => $item->id,
+            'payment_method' => $user->payment_method_id,
+            'shipping_post_code' => $user->shipping_post_code,
+            'shipping_address' => $user->shipping_address,
+            'shipping_building' => $user->shipping_building,
+        ];
+        $response = $this->post('/purchase/checkout', $formData);
+
+        // 商品購入完了処理
+        $response = $this->get('/purchase/buy');
+
+        // アイテム一覧ページへ移動
+        $response = $this->get('/');
+        $response->assertStatus(200);
+        $response->assertSee($item->name);
+        $response->assertSee('Sold');
+    }
 
     /**
      * 「プロフィール/購入した商品一覧」に追加されている
