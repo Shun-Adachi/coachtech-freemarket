@@ -99,7 +99,7 @@ php artisan storage:link
 
 このプロジェクトのER図は以下の通りです。
 
-<img src="./diagram/ER/ER.png" alt="ER図" width="700">
+<img src="./diagram/ER/ER.png" alt="ER図" width="800">
 
 ---
 
@@ -112,7 +112,7 @@ docker-compose exec mysql bash
 # mysqlコンテナ内で以下を実行
 mysql -u root -p
 
-# mysqlコンソールで以下を実行
+# MySQLクライアントで以下を実行
 CREATE DATABASE test;
 GRANT ALL PRIVILEGES ON test.* TO 'laravel_user'@'%';
 FLUSH PRIVILEGES;
@@ -146,4 +146,5 @@ php artisan test
 正常にテストが完了すると、以下のように表示されます。
 ```bash
 Tests: 36 passed
+Time:  x.xxs
 ```
