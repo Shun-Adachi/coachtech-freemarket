@@ -47,25 +47,35 @@ class UserController extends Controller
         $user = auth()->user();
         $tempImage = $request->temp_image;
 
-        //画像選択あり
+        // 更新前データ
+        $currentUserData  = [
+            'name' => $user->name,
+            'current_post_code' => $user->current_post_code,
+            'current_address' => $user->current_address,
+            'current_building' => $user->current_building,
+            'thumbnail_path' => $user->thumbnail_path,
+        ];
+
+        // 画像選択あり
         if ($request->hasFile('image')) {
             // 古い画像を削除
             $this->deleteThumbnail($user->thumbnail_path);
             // ファイルを保存し、パスを取得
             $thumbnailPath = $request->file('image')->store('images/users/', 'public');
         }
-        //画像選択なし、一時ファイルあり
+        // 画像選択なし、一時ファイルあり
         elseif ($tempImage) {
             // 古い画像を削除
             $this->deleteThumbnail($user->thumbnail_path);
             // 一時ファイルを移動し、パスを取得
             $thumbnailPath = moveTempImageToPermanentLocation($tempImage, 'images/users/');
         }
-        //画像選択なし、一時ファイルなし
+        // 画像選択なし、一時ファイルなし
         else {
             $thumbnailPath = $user->thumbnail_path;
         }
-        //更新処理
+
+        // 更新データ
         $updateData = [
             'name' => $request->input(['name']),
             'current_post_code' => $request->input(['current_post_code']),
@@ -74,11 +84,13 @@ class UserController extends Controller
             'thumbnail_path' => $thumbnailPath,
         ];
 
-        //初回ログイン時の処理
-        if (($user->current_post_code === $user->shipping_post_code) &&
-            ($user->current_address === $user->shipping_address) &&
-            ($user->current_building === $user->shipping_building)
-        ) {
+        // 変更なしの場合は更新処理およびメッセージなし
+        if ($currentUserData == $updateData) {
+            return redirect('/mypage/profile');
+        }
+
+        //初回ログイン時は現住所と送付先を同時に変更
+        if (!$user->current_post_code && !$user->current_address && !$user->current_building) {
             $shippingData = [
                 'shipping_post_code' => $request->input(['current_post_code']),
                 'shipping_address' => $request->input(['current_address']),
@@ -88,8 +100,7 @@ class UserController extends Controller
         }
 
         User::where('id', $request->id)->update($updateData);
-
-        return redirect('/mypage')->with('message', 'プロフィールが更新されました');
+        return redirect('/')->with('message', 'プロフィールが更新されました');
     }
 
     // ログアウト処理
