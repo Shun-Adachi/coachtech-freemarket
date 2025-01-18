@@ -11,7 +11,6 @@ use App\Models\Purchase;
 use App\Http\Requests\EditAddressRequest;
 use App\Http\Requests\PurchaseRequest;
 use Stripe\StripeClient;
-use Illuminate\Support\Facades\Log;
 
 class PurchaseController extends Controller
 {
@@ -23,24 +22,24 @@ class PurchaseController extends Controller
     }
 
     // 購入画面表示
-    public function purchase(Request $request, $item_id)
+    public function purchase(Request $request, $itemId)
     {
-        $item = Item::where('id', $item_id)->first();
+        $item = Item::where('id', $itemId)->first();
         $user = User::findOrFail(Auth::id());
-        $payment_methods = PaymentMethod::get();
-        $purchase =  Purchase::where('item_id', $item_id)->exists();
+        $paymentMethods = PaymentMethod::get();
+        $purchase =  Purchase::where('item_id', $itemId)->exists();
 
         // 円形式変換
-        $item->price = '\\ ' . number_format($item->price);
+        $item->price = number_format($item->price);
 
-        return view('purchase', compact('user', 'item', 'payment_methods', 'purchase'));
+        return view('purchase', compact('user', 'item', 'paymentMethods', 'purchase'));
     }
 
     // 配送先住所変更画面表示
     public function edit(Request $request)
     {
         $user = auth()->user();
-        $item_id = $request->item_id;
+        $itemId = $request->item_id;
 
         // 支払方法の更新(POST時のみ)
         if ($request->payment_method) {
@@ -48,7 +47,7 @@ class PurchaseController extends Controller
             $user->payment_method_id = $request->payment_method;
         }
 
-        return view('edit-address', compact('user', 'item_id'));
+        return view('edit-address', compact('user', 'itemId'));
     }
 
     // 配送先住所を変更処理
@@ -67,7 +66,7 @@ class PurchaseController extends Controller
             'shipping_building' => $request->shipping_building,
         ];
 
-        //変更なしの場合は更新処理およびメッセージなし
+        // 変更なしの場合は更新処理およびメッセージなし
         if ($currentUserData == $updateData) {
             return redirect()->route('purchase', ['item_id' => $request->item_id]);
         }
@@ -82,6 +81,11 @@ class PurchaseController extends Controller
         $user = auth()->user();
         $requestData = session('request_data', []);
         $user = Auth::user();
+
+        if (!$requestData) {
+            return redirect('/mypage')->with('error', '決済情報が見つかりません');
+        }
+
         Purchase::create([
             'user_id' => $user->id,
             'item_id' => $requestData['item_id'],
@@ -100,10 +104,7 @@ class PurchaseController extends Controller
         $user = auth()->user();
         $item = Item::where('id', $request->item_id)->first();
 
-        //Stripe::setApiKey(config('services.stripe.secret'));
         try {
-
-            Log::info('Session URL1:');
             $session = $this->stripeClient->checkout->sessions->create([
                 'payment_method_types' => ['card'],
                 'line_items' => [[
@@ -124,7 +125,6 @@ class PurchaseController extends Controller
 
             session()->put('request_data', $request->all());
 
-            Log::info('Session URL2:', ['url' => $session->url]);
             return redirect($session->url);
         } catch (\Exception $e) {
             return back()->with('error', 'チェックアウトセッションの生成に失敗しました ' . $e->getMessage());

@@ -1,6 +1,10 @@
-html,
 body {
   height: 100%;
+  font-family: 'Inter', sans-serif;
+}
+
+code {
+  font-family: 'Courier New', monospace;
 }
 
 input[type="submit"] {

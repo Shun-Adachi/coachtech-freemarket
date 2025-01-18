@@ -1,9 +1,11 @@
 *
 !default
 !default/items
-!default/items/
+!default/items/*
 !default/users
-!default/users/
+!default/users/*
 !images
-!temp/
+!images/items
+!images/users
+!temp
 !.gitignore

@@ -17,17 +17,17 @@ class UserController extends Controller
     {
         //ユーザー情報・タブ情報取得
         $user = Auth::user();
-        $user_id = $user->id ?? null;
+        $userId = $user->id ?? null;
         $tab = $request->tab;
 
         //出品した商品
         if ($tab === 'sell') {
-            $items = Item::where('user_id', $user_id)->get();
+            $items = Item::where('user_id', $userId)->get();
         }
         //購入した商品
         else {
-            $purchase_item_ids = Purchase::where('user_id', $user_id)->pluck('item_id');
-            $items = Item::whereIn('id', $purchase_item_ids)->get();
+            $purchaseItemIds = Purchase::where('user_id', $userId)->pluck('item_id');
+            $items = Item::whereIn('id', $purchaseItemIds)->get();
         }
 
         return view('mypage', compact('user', 'items', 'tab'));
@@ -45,51 +45,62 @@ class UserController extends Controller
     public function update(UserRequest $request)
     {
         $user = auth()->user();
-        $temp_image = $request->temp_image;
+        $tempImage = $request->temp_image;
 
-        //画像選択あり
+        // 更新前データ
+        $currentUserData  = [
+            'name' => $user->name,
+            'current_post_code' => $user->current_post_code,
+            'current_address' => $user->current_address,
+            'current_building' => $user->current_building,
+            'thumbnail_path' => $user->thumbnail_path,
+        ];
+
+        // 画像選択あり
         if ($request->hasFile('image')) {
             // 古い画像を削除
             $this->deleteThumbnail($user->thumbnail_path);
             // ファイルを保存し、パスを取得
-            $thumbnail_path = $request->file('image')->store('images/users/', 'public');
+            $thumbnailPath = $request->file('image')->store('images/users/', 'public');
         }
-        //画像選択なし、一時ファイルあり
-        elseif ($temp_image) {
+        // 画像選択なし、一時ファイルあり
+        elseif ($tempImage) {
             // 古い画像を削除
             $this->deleteThumbnail($user->thumbnail_path);
             // 一時ファイルを移動し、パスを取得
-            $thumbnail_path = moveTempImageToPermanentLocation($temp_image, 'images/users/');
+            $thumbnailPath = moveTempImageToPermanentLocation($tempImage, 'images/users/');
         }
-        //画像選択なし、一時ファイルなし
+        // 画像選択なし、一時ファイルなし
         else {
-            $thumbnail_path = $user->thumbnail_path;
+            $thumbnailPath = $user->thumbnail_path;
         }
-        //更新処理
-        $update_data = [
+
+        // 更新データ
+        $updateData = [
             'name' => $request->input(['name']),
             'current_post_code' => $request->input(['current_post_code']),
             'current_address' => $request->input(['current_address']),
             'current_building' => $request->input(['current_building']),
-            'thumbnail_path' => $thumbnail_path,
+            'thumbnail_path' => $thumbnailPath,
         ];
 
-        //初回ログイン時の処理
-        if (($user->current_post_code === $user->shipping_post_code) &&
-            ($user->current_address === $user->shipping_address) &&
-            ($user->current_building === $user->shipping_building)
-        ) {
-            $shipping_data = [
+        // 変更なしの場合は更新処理およびメッセージなし
+        if ($currentUserData == $updateData) {
+            return redirect('/mypage/profile');
+        }
+
+        //初回ログイン時は現住所と送付先を同時に変更
+        if (!$user->current_post_code && !$user->current_address && !$user->current_building) {
+            $shippingData = [
                 'shipping_post_code' => $request->input(['current_post_code']),
                 'shipping_address' => $request->input(['current_address']),
                 'shipping_building' => $request->input(['current_building']),
             ];
-            $update_data = array_merge($update_data, $shipping_data);
+            $updateData = array_merge($updateData, $shippingData);
         }
 
-        User::where('id', $request->id)->update($update_data);
-
-        return redirect('/mypage')->with('message', 'プロフィールが更新されました');
+        User::where('id', $request->id)->update($updateData);
+        return redirect('/')->with('message', 'プロフィールが更新されました');
     }
 
     // ログアウト処理
@@ -102,8 +113,11 @@ class UserController extends Controller
     //ユーザープロフィール画像削除
     public function deleteThumbnail($thumbnailPath)
     {
-        if ($thumbnailPath && Storage::disk('public')->exists($thumbnailPath)) {
-            Storage::disk('public')->delete($thumbnailPath);
+        $dummyDataDirectory = 'default/users/';
+        if ($thumbnailPath && !str_starts_with($thumbnailPath, $dummyDataDirectory)) {
+            if (Storage::disk('public')->exists($thumbnailPath)) {
+                Storage::disk('public')->delete($thumbnailPath);
+            }
         }
     }
 }

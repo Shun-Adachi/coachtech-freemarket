@@ -24,11 +24,11 @@ class SellRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            'name' => ['required', 'string', 'max:255'],
+            'name' => ['required', 'string'],
             'description' => ['required', 'string', 'max:255'],
             'categories' => ['required'],
             'condition' => ['required'],
-            'price' => ['required', 'integer', 'min:0'],
+            'price' => ['required', 'integer', 'min:50'],
         ];
 
         if (!$this->hasFile('image') && $this->temp_image) {
@@ -36,7 +36,7 @@ class SellRequest extends FormRequest
             $rules['image'] = [];
         } else {
             // 通常のバリデーションルール
-            $rules['image'] = ['required', 'mimes:jpg,jpeg,png', 'max:2048'];
+            $rules['image'] = ['required', 'mimes:jpg,jpeg,png'];
         }
 
         return $rules;
@@ -54,7 +54,7 @@ class SellRequest extends FormRequest
             'condition.required' => '商品の状態を選択してください',
             'price.required' => '販売価格を入力してください',
             'price.integer' => '販売価格は整数を入力してください',
-            'price.min' => '販売価格は0円以上で入力してください',
+            'price.min' => '販売価格は50円以上で入力してください',
         ];
     }
 

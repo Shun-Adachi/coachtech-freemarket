@@ -17,9 +17,9 @@ class ItemController extends Controller
     // 商品一覧ページ表示
     public function index(Request $request)
     {
-        //ユーザー情報・タブ情報・検索取得
+        // ユーザー情報・タブ情報・検索取得
         $user = Auth::user();
-        $user_id = $user->id ?? null;
+        $userId = $user->id ?? null;
         $tab = $request->tab;
         if ($request->isMethod('post')) {
             $keyword = $request->input('keyword', '');
@@ -30,71 +30,70 @@ class ItemController extends Controller
             $keyword = "";
         }
 
-        //マイリスト
+        // マイリスト
         if ($tab === 'mylist') {
-            $favorite_item_ids = Favorite::where('user_id', $user_id)->pluck('item_id');
-            $items = Item::whereIn('id', $favorite_item_ids)->KeywordSearch($keyword)->get();
+            $favoriteItemIds = Favorite::where('user_id', $userId)->pluck('item_id');
+            $items = Item::whereIn('id', $favoriteItemIds)->KeywordSearch($keyword)->get();
         }
-        //商品一覧
+        // 商品一覧
         else {
-            $items = Item::where('user_id', '!=', $user_id)->KeywordSearch($keyword)->get();
+            $items = Item::where('user_id', '!=', $userId)->KeywordSearch($keyword)->get();
         }
 
-        $sold_item_ids = Purchase::pluck('item_id')->toArray();
+        $soldItemIds = Purchase::pluck('item_id')->toArray();
 
-
-        return view('index', compact('items', 'tab', 'sold_item_ids'));
+        return view('index', compact('items', 'tab', 'soldItemIds'));
     }
 
     // 商品詳細ページ表示
-    public function show(Request $request, $item_id)
+    public function show(Request $request, $itemId)
     {
-        //ユーザー情報取得
+        // ユーザー情報取得
         $user = Auth::user();
-        $user_id = $user->id ?? null;
+        $userId = $user->id ?? null;
 
         // 商品詳細取得
-        $item = Item::with(['user', 'condition'])->where('id', $item_id)->first();
-        $purchase =  Purchase::where('item_id', $item_id)->exists();
+        $item = Item::with(['user', 'condition'])->where('id', $itemId)->first();
+        $purchase =  Purchase::where('item_id', $itemId)->exists();
 
         // 円形式変換
-        $item->price = '\\ ' . number_format($item->price);
+        $item->price = number_format($item->price);
 
-        //お気に入り情報取得
-        if ($user_id) {
-            $is_my_favorite = Favorite::where('item_id', $item_id)->where('user_id', $user_id)->exists();
+        // お気に入り情報取得
+        if ($userId) {
+            $isFavorite = Favorite::where('item_id', $itemId)->where('user_id', $userId)->exists();
         } else {
-            $is_my_favorite = false;
+            $isFavorite = false;
         }
 
-        $favorites_count = Favorite::where('item_id', $item_id)->count();
+        $favoritesCount = Favorite::where('item_id', $itemId)->count();
 
-        //コメント数取得
-        $comments = Comment::with('user')->where('item_id', $item_id)->get();
-        $comments_count = $comments->count();
+        // コメント数取得
+        $comments = Comment::with('user')->where('item_id', $itemId)->get();
+        $commentsCount = $comments->count();
 
-        //関連カテゴリー取得
-        $item_categories = CategoryItem::with('category')->where('item_id', $item_id)->get();
+        // 関連カテゴリー取得
+        $itemCategories = CategoryItem::with('category')->where('item_id', $itemId)->get();
 
-        return view('item', compact('item', 'purchase', 'is_my_favorite', 'favorites_count', 'comments', 'comments_count', 'item_categories'));
+        return view('item', compact('item', 'purchase', 'isFavorite', 'favoritesCount', 'comments', 'commentsCount', 'itemCategories'));
     }
 
     // お気に入り登録・解除処理
-    public function favorite($item_id)
+    public function favorite($itemId)
     {
-        //お気に入り情報取得
+        // お気に入り情報取得
         $user = Auth::user();
-        $favorite = Favorite::where('item_id', $item_id)->where('user_id', $user->id)->first();
+        $favorite = Favorite::where('item_id', $itemId)->where('user_id', $user->id)->first();
 
-        //解除
+        // 解除
         if ($favorite) {
             Favorite::find($favorite->id)->delete();
         }
-        //登録
+        // 登録
         else {
             $favorite = [
                 'user_id' => $user->id,
-                'item_id' => $item_id,
+                'item_id' => $itemId,
             ];
             Favorite::create($favorite);
         }

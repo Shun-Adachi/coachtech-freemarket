@@ -3,8 +3,6 @@
 namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Mail\Mailable;
 use Tests\TestCase;
 use App\Models\User;
 

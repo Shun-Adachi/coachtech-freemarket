@@ -11,8 +11,6 @@ use App\Models\Favorite;
 use App\Models\Comment;
 use App\Models\CategoryItem;
 
-use Illuminate\Support\Facades\Hash;
-
 class ItemTest extends TestCase
 {
     use RefreshDatabase;
@@ -41,9 +39,11 @@ class ItemTest extends TestCase
             ->orderByDesc('count')
             ->first();
         $item = Item::where('id', $mostFrequentItem->item_id)->first();
+        $categoryItems = CategoryItem::with('category')->where('item_id', $item->id)->get();
+
+        // 商品詳細ページ表示
         $response = $this->get("/item/{$item->id}");
         $response->assertStatus(200);
-        $categoryItems = CategoryItem::with('category')->where('item_id', $item->id)->get();
 
         // 商品詳細ページに必要な情報が表示されていることを確認
         $response->assertSee($item->name);
@@ -79,10 +79,6 @@ class ItemTest extends TestCase
      */
     public function test_user_can_add_item_to_favorites()
     {
-        //$user = User::first();
-        //$this->actingAs($user);
-        //$item = Item::where('user_id', '!=', $user->id)->first();
-
         // 全商品のコレクションを取得
         $items = Item::all();
         $users = User::all();
@@ -91,7 +87,7 @@ class ItemTest extends TestCase
             foreach ($users as $user) {
                 if ($item->user_id !== $user->id) {
                     $noFavoritesByOthers  = Favorite::where('item_id', $item->id)
-                        ->where('user_id', $user->id) // コメントしていないユーザー
+                        ->where('user_id', $user->id)
                         ->doesntExist();
 
                     // 出品者以外のいいねがついていない場合、この商品を返す
@@ -131,13 +127,69 @@ class ItemTest extends TestCase
     }
 
     /**
+     * 追加済みのアイコンは色が変化する
+     *
+     * @return void
+     */
+    public function test_favorite_icon_color_changes()
+    {
+        // 全商品のコレクションを取得
+        $items = Item::all();
+        $users = User::all();
+        // お気に入り登録にない商品とユーザーの組み合わせを取得
+        foreach ($items as $item) {
+            foreach ($users as $user) {
+                if ($item->user_id !== $user->id) {
+                    $noFavoritesByOthers  = Favorite::where('item_id', $item->id)
+                        ->where('user_id', $user->id)
+                        ->doesntExist();
+
+                    // 出品者以外のいいねがついていない場合、この商品を返す
+                    if ($noFavoritesByOthers) {
+                        $tempItem = $item;
+                        $tempUser = $user;
+                        break;
+                    }
+                }
+            }
+            if ($noFavoritesByOthers) {
+                break;
+            }
+        }
+        $item = $tempItem;
+        $user = $tempUser;
+        $this->actingAs($user);
+
+        // 商品詳細画面表示
+        $response = $this->get("/item/{$item->id}");
+
+        // 初期状態で「いいね追加済み」のアイコンが表示されていないことを確認
+        $response->assertSee('images/favorite-inactive.png');
+        $response->assertDontSee('/images/favorite-active.png');
+
+        // いいねボタン押下
+        $response = $this->get("/item/favorite/{$item->id}");
+        $response->assertStatus(302);
+        $this->assertDatabaseHas('favorites', [
+            'user_id' => $user->id,
+            'item_id' => $item->id,
+        ]);
+
+        // 商品詳細ページを再取得
+        $response = $this->get("/item/{$item->id}");
+
+        // 「いいね後」のアイコンが正しく表示されていることを確認
+        $response->assertDontSee('/images/favorite-inactive.png');
+        $response->assertSee('/images/favorite-active.png');
+    }
+
+    /**
      *  再度いいねアイコンを押下することで、いいねを解除できる
      *
      * @return void
      */
     public function test_user_can_remove_favorite_from_item()
     {
-
         $favorite = Favorite::first();
         $item = Item::where('id', $favorite->item_id)->first();
         $user = User::where('id', $favorite->user_id)->first();
@@ -169,7 +221,6 @@ class ItemTest extends TestCase
      */
     public function test_logged_in_user_can_post_comment()
     {
-
         $user = User::first();
         $this->actingAs($user);
         $item = Item::where('user_id', '!=', $user->id)->first();
@@ -228,7 +279,6 @@ class ItemTest extends TestCase
      */
     public function test_validation_message_is_displayed_when_comment_is_empty()
     {
-
         $user = User::first();
         $this->actingAs($user);
         $item = Item::where('user_id', '!=', $user->id)->first();
@@ -245,7 +295,6 @@ class ItemTest extends TestCase
         $response->assertStatus(302);
         $response->assertSessionHasErrors(['comment']);
     }
-
 
     /**
      *  コメントが255字以上の場合、バリデーションメッセージが表示される
