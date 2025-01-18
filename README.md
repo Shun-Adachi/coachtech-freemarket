@@ -19,7 +19,7 @@
 - **Webサーバー**: Nginx 1.21.1
 - **バージョン管理**: Git
 - **決済サービス**: Stripe
-- **メール検証環境**: Mailhog（ログイン認証メールの確認に使用）
+- **メール検証環境**: MailHog（ログイン認証メールの確認に使用）
 - **テスト環境**: PHPUnit
 
 ---
@@ -60,11 +60,12 @@ STRIPE_KEY=your_stripe_publishable_key # Stripeダッシュボードで確認し
 STRIPE_SECRET=your_stripe_secret_key   # シークレットキーを設定
 ```
 
-- Stripeキーの取得手順
+- **Stripeキーの取得手順**
   1. Stripeアカウントを作成
      Stripe公式サイトにアクセスし、新しいアカウントを登録します。
   2. APIキーを取得
      Stripeダッシュボードの「開発者」→「APIキー」から、公開可能キーとシークレットキーを取得します。
+
 
 ### 4. 初期セットアップ
 
@@ -85,7 +86,7 @@ php artisan storage:link
 - 商品一覧画面: <http://localhost/>
 - 会員登録画面: <http://localhost/register>
 - ログイン画面: <http://localhost/login>
-- Mailhog: <http://localhost:8025> （ログイン認証メール確認用）
+- MailHog: <http://localhost:8025> （ログイン認証メール確認用）
 
 ---
 
@@ -122,9 +123,11 @@ FLUSH PRIVILEGES;
 
 `.env`ファイルをコピーし、`.env.testing`ファイルを作成して以下を設定します。
 
+```env.testing
 APP_ENV=testing
 APP_KEY=
 DB_DATABASE=test
+```
 
 ### 3. テスト用のアプリケーションキーを生成する
 
@@ -144,6 +147,7 @@ php artisan test
 ```
 
 正常にテストが完了すると、以下のように表示されます。
+
 ```bash
 Tests: 36 passed
 Time:  x.xxs
