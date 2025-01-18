@@ -24,7 +24,7 @@ class CreateUsersTable extends Migration
             $table->string('shipping_post_code')->nullable();
             $table->string('shipping_address', 255)->nullable();
             $table->string('shipping_building', 255)->nullable();
-            $table->foreignId('payment_method_id')->default(1)->constrained()->cascadeOnDelete();
+            $table->foreignId('payment_method_id')->constrained()->cascadeOnDelete();
             $table->string('thumbnail_path', 255)->nullable();
             $table->string('login_token')->nullable();
             $table->timestamps();
