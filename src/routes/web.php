@@ -5,6 +5,8 @@ use App\Http\Controllers\SellController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\CustomAuthenticatedSessionController;
+use App\Http\Controllers\TradeMessageController;
+use App\Http\Controllers\TradeRatingController;
 use Illuminate\Support\Facades\Route;
 /*
 |--------------------------------------------------------------------------
@@ -50,5 +52,10 @@ Route::middleware('auth')->group(function () {
         Route::get('/mypage/profile', [UserController::class, 'edit']);
         Route::patch('/mypage/profile/update', [UserController::class, 'update']);
         Route::get('/logout', [UserController::class, 'logout'])->name('logout');
+        Route::get('/trades/{trade_id}/messages', [TradeMessageController::class, 'index']);
+        Route::post('/trades/{trade_id}/messages', [TradeMessageController::class, 'store']);
+        Route::patch('/trades/{trade_id}/messages/{trade_id}', [TradeMessageController::class, 'update']);
+        Route::delete('/trades/{trade_id}/messages/{message_id}', [TradeMessageController::class, 'destroy']);
+        Route::post('/trades/{trade_id}/rating', [TradeRatingController::class, 'store']);
     });
 });

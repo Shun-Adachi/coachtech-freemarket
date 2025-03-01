@@ -16,4 +16,10 @@ class Purchase extends Model
         'shipping_address',
         'shipping_building',
     ];
+
+    //PurchaseとTradeのリレーション
+    public function Condition()
+    {
+        return $this->belongsTo(Trade::class);
+    }
 }

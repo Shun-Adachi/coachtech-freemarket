@@ -16,7 +16,7 @@ class CreateTradeMessagesTable extends Migration
         Schema::create('trade_messages', function (Blueprint $table) {
             $table->id();
             $table->text('message', 400);
-            $table->foreignId('trade_chat_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('trade_id')->constrained()->cascadeOnDelete();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->string('image_path', 255)->nullable();
             $table->timestamps();
