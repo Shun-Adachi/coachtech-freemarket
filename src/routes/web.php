@@ -55,7 +55,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/logout', [UserController::class, 'logout'])->name('logout');
         Route::get('/trades/{trade}/messages', [TradeMessageController::class, 'index']);
         Route::post('/trades/{trade}/messages', [TradeMessageController::class, 'store']);
-        Route::get('/trades/{trade}/messages/edit/{message}', [TradeMessageController::class, 'edit']);
+        Route::post('/trades/{trade}/messages/edit/{message}', [TradeMessageController::class, 'edit']);
         Route::patch('/trades/{trade}/messages/{message}', [TradeMessageController::class, 'update']);
         Route::delete('/trades/{trade}/messages/{message}', [TradeMessageController::class, 'destroy']);
         Route::post('/trades/{trade}/complete', [TradeController::class, 'complete']);

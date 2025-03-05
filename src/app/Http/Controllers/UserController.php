@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\UserRequest;
 use App\Models\Trade;
-use App\Models\TradeMessage;
 use App\Models\User;
 use App\Models\Item;
 use App\Models\Purchase;
@@ -22,23 +21,19 @@ class UserController extends Controller
         $userId = $user->id ?? null;
         $tab = $request->tab;
 
-        // 取引中の商品の一覧を、購入者または出品者のいずれかとして関与している取引から取得する
-        /*
         $trades = Trade::with(['purchase.item', 'tradeMessages'])
-            ->where('is_complete', false)
-            ->where(function ($query) use ($userId) {
+            // 取引が自分に関係しているものに絞る
+            ->where(function($query) use ($userId) {
                 $query->whereHas('purchase', function ($q) use ($userId) {
                     $q->where('user_id', $userId);
                 })->orWhereHas('purchase.item', function ($q) use ($userId) {
                     $q->where('user_id', $userId);
                 });
             })
-            ->get();*/
-        $trades = Trade::with(['purchase.item', 'tradeMessages'])
             ->where(function ($query) use ($userId) {
-                // 条件①: 取引が未完了の場合
+                // 取引が未完了の場合
                 $query->where('is_complete', false)
-                // 条件②: 取引が完了しているが、自分が評価をしていない場合
+                // 取引が完了しているが、自分が評価をしていない場合
                 ->orWhere(function ($query2) use ($userId) {
                     $query2->where('is_complete', true)
                         ->where(function ($query3) use ($userId) {
@@ -83,36 +78,15 @@ class UserController extends Controller
             $item->latest_partner_message_at = $partnerMessages->max('created_at');
             // 未読の相手からのメッセージ数もカウント（任意）
             $item->message_count = $partnerMessages->where('is_read', false)->count();
-/*
-            $item->latest_trade_message_at = $tradesForItem->max('latest_trade_message_at');
-            $item->message_count = $tradesForItem->sum(function($trade) use ($userId) {
-                return $trade->tradeMessages
-                            ->where('user_id', '!=', $userId)
-                            ->where('is_read', false)
-                            ->count();
-            });*/
             return $item;
         });
 
         // 未読メッセージの合計を取得
         $totalTradePartnerMessages = $items->sum('message_count');
-
-        // 最新メッセージ日時の降順に並び替え
-        //$items = $items->sortByDesc('latest_trade_message_at')->values();
-
         $items = $items->sortByDesc(function ($item) {
-            // 未読相手メッセージがない場合は null になるので、タイムスタンプがあるものを優先
             return $item->latest_partner_message_at ? $item->latest_partner_message_at->timestamp : 0;
         })->values();
-        /*
-        $itemIds = $items->pluck('id')->toArray();
 
-        $totalTradePartnerMessages = TradeMessage::where('user_id', '!=', $userId)
-            ->where('is_read', false)
-            ->whereHas('trade.purchase.item', function ($query) use ($itemIds) {
-                $query->whereIn('id', $itemIds);
-            })->count();
-*/
         // 出品した商品の場合、商品リストを更新
         if ($tab === 'sell') {
             $items = Item::where('user_id', $userId)->get();
@@ -142,13 +116,11 @@ class UserController extends Controller
             if ($trade->purchase->user_id == $userId && $trade->seller_rating_points !== null) {
                 $totalRating += $trade->seller_rating_points;
                 $ratingCount++;
-                echo($trade->seller_rating_points . ':' .$totalRating .':' .$ratingCount . '<br>');
             }
             // ユーザーが出品者の場合（購入者側の評価）
             if ($trade->purchase->item->user_id == $userId && $trade->buyer_rating_points !== null) {
                 $totalRating += $trade->buyer_rating_points;
                 $ratingCount++;
-                echo($trade->buyer_rating_points . ':' .$totalRating .':' .$ratingCount . '<br>');
             }
         }
 

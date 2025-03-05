@@ -109,7 +109,14 @@
             <!-- 編集・削除リンク -->
             @if(!$trade->is_complete)
               <div class="message-actions">
-                <a href="{{ url('/trades/' . $trade->id . '/messages/edit/' .  $message->id)  }}" class="message-actions__edit-link">編集</a>
+                <form
+                  action="{{ url('/trades/' . $trade->id . '/messages/edit/' .  $message->id) }}"
+                  method="POST"
+                  class="message-actions__delete-form">
+                  @csrf
+                  @method('POST')
+                  <button type="submit" class="message-actions__edit-link">編集</button>
+                </form>
                 <form
                   action="{{ url('/trades/' . $trade->id . '/messages/' .  $message->id) }}"
                   method="POST"
@@ -183,7 +190,6 @@
   </main>
 </div>
 
-
 <!-- モーダルのマークアップ -->
 @php
     $isBuyer = ($trade->purchase->user_id === auth()->id());
@@ -220,89 +226,19 @@
     </div>
   </div>
 @endif
-<!-- 取引完了後のモーダル表示 -->
+
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-    // Blade変数をJSON化して受け取る
+
+    // モーダル表示
     var showModal = JSON.parse('@json($showModal)');
 
     if (showModal) {
       var modal = document.getElementById('ratingModal');
       modal.style.display = 'block';
     }
-  });
-</script>
-<!-- 画像選択時にファイル名を表示 -->
-<script>
-  document.addEventListener('DOMContentLoaded', function(){
-    var fileInput = document.querySelector('.message-form__image--input');
-    var filenameDisplay = document.querySelector('.message-form__filename');
 
-    fileInput.addEventListener('change', function(){
-      if(fileInput.files && fileInput.files.length > 0){
-        filenameDisplay.textContent = fileInput.files[0].name;
-      } else {
-        filenameDisplay.textContent = '';
-        }
-    });
-  });
-</script>
-<!-- テキストエリアの高さ自動調整
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    var textareas = document.querySelectorAll('textarea');
-
-    function autoResize() {
-      this.style.height = 'auto';
-      this.style.height = this.scrollHeight + 'px';
-    }
-    textareas.forEach(function(textarea) {
-      autoResize.call(textarea);
-      textarea.addEventListener('input', autoResize, false);
-    });
-  });
-</script> -->
-<!-- 編集用テキストエリアが存在する場合、フォーカスを当てる
-<script>
-  document.addEventListener('DOMContentLoaded', function(){
-    var editingTextArea = document.querySelector('.message-edit-form__textarea');
-    if(editingTextArea) {
-      editingTextArea.focus();
-    }
-  });
-</script>-->
-<!-- メッセージフォームのテキストエリア情報をローカルストレージに保存し、ページを開いた時に反映させる
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    var textarea = document.querySelector('.message-form__message');
-    if (!textarea) return;
-
-    var savedValue = localStorage.getItem('messageInput');
-    if (savedValue !== null) {
-      textarea.value = savedValue;
-    }
-
-    textarea.addEventListener('input', function() {
-      localStorage.setItem('messageInput', textarea.value);
-    });
-  });
-</script> -->
-<!-- メッセージ送信時にローカルストレージをクリアする
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    var form = document.querySelector('.message-form');
-    if (form) {
-      form.addEventListener('submit', function() {
-        localStorage.removeItem('messageInput');
-      });
-    }
-  });
-</script> -->
-
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-
-    // モーダル表示
+     // ファイル選択時にファイル名表示
     var fileInput = document.querySelector('.message-form__image--input');
     var filenameDisplay = document.querySelector('.message-form__filename');
 

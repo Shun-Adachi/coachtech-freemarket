@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use App\Http\Requests\TradeMessageRequest;
 use App\Http\Requests\TradeMessageUpdateRequest;
 use App\Models\Trade;
@@ -43,8 +42,8 @@ class TradeMessageController extends Controller
         // 編集モード対象のメッセージIDとして取得
         $editingMessageId = session('editingMessageId');
 
-        // サイドバー用：認証ユーザーが購入者または出品者として関与している取引のうち、
-        // 現在表示している取引($trade)を除く取引一覧を取得する
+        // 認証ユーザーが購入者または出品者として関与している取引のうち、
+        // 現在表示している取引を除く取引一覧を取得する
         $sidebarTrades = Trade::with(['purchase.item', 'tradeMessages'])
             ->where('is_complete', false)
             ->where(function ($query) use ($userId) {
@@ -55,11 +54,6 @@ class TradeMessageController extends Controller
                 });
             })
             ->where('id', '!=', $trade->id)
-            /*
-            // 各取引の最新メッセージ日時で降順にソート
-            ->orderByDesc(
-                DB::raw('(select max(created_at) from trade_messages where trade_messages.trade_id = trades.id)')
-            )*/
             ->get();
 
         return view('trade-chat', compact('trade','messages','sidebarTrades','item','tradePartner', 'editingMessageId'));

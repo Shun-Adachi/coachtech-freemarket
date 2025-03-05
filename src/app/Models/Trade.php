@@ -21,12 +21,6 @@ class Trade extends Model
         return $this->belongsTo(Purchase::class);
     }
 
-    //TradeとTradeStatusのリレーション
-    public function tradeStatus()
-    {
-        return $this->belongsTo(TradeStatus::class);
-    }
-
     // TradeとTradeMessageのリレーション
     public function tradeMessages()
     {
