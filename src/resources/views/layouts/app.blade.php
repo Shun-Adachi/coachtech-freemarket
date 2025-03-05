@@ -11,7 +11,6 @@
   @yield('css')
   @yield('script')
 </head>
-
 <body>
   <div class="app">
     <header class="header">

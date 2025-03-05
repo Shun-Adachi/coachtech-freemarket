@@ -19,6 +19,7 @@ class CreateTradeMessagesTable extends Migration
             $table->foreignId('trade_id')->constrained()->cascadeOnDelete();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->string('image_path', 255)->nullable();
+            $table->boolean('is_read')->default(false);
             $table->timestamps();
         });
     }

@@ -17,9 +17,21 @@ class Purchase extends Model
         'shipping_building',
     ];
 
-    //PurchaseとTradeのリレーション
-    public function Condition()
+   //PurchaseとUserのリレーション
+    public function user()
     {
-        return $this->belongsTo(Trade::class);
+        return $this->belongsTo(User::class);
+    }
+
+    //PurchaseとTradeのリレーション
+    public function trade()
+    {
+        return $this->hasMany(Trade::class);
+    }
+
+    //PurchaseとItemのリレーション
+    public function item()
+    {
+        return $this->belongsTo(Item::class);
     }
 }

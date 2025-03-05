@@ -8,6 +8,7 @@ use App\Models\PaymentMethod;
 use App\Models\Item;
 use App\Models\User;
 use App\Models\Purchase;
+use App\Models\Trade;
 use App\Http\Requests\EditAddressRequest;
 use App\Http\Requests\PurchaseRequest;
 use Stripe\StripeClient;
@@ -86,13 +87,18 @@ class PurchaseController extends Controller
             return redirect('/mypage')->with('error', '決済情報が見つかりません');
         }
 
-        Purchase::create([
+        $purchase = Purchase::create([
             'user_id' => $user->id,
             'item_id' => $requestData['item_id'],
             'payment_method_id' => $requestData['payment_method'],
             'shipping_post_code' => $requestData['shipping_post_code'],
             'shipping_address' => $requestData['shipping_address'],
             'shipping_building' => $requestData['shipping_building'],
+        ]);
+
+        Trade::create([
+            'purchase_id' => $purchase->id,
+            'is_complete' => false,
         ]);
 
         return redirect('/mypage')->with('message', '商品を購入しました');

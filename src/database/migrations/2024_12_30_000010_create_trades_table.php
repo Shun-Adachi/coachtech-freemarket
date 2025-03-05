@@ -16,7 +16,7 @@ class CreateTradesTable extends Migration
         Schema::create('trades', function (Blueprint $table) {
             $table->id();
             $table->foreignId('purchase_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('trade_status_id')->constrained()->cascadeOnDelete();
+            $table->boolean('is_complete')->default(false);
             $table->unsignedInteger('buyer_rating_points')->nullable();
             $table->unsignedInteger('seller_rating_points')->nullable();
             $table->timestamps();

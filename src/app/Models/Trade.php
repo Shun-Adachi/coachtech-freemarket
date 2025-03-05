@@ -10,7 +10,7 @@ class Trade extends Model
     use HasFactory;
     protected $fillable = [
         'purchase_id',
-        'trade_status_id',
+        'is_complete',
         'buyer_rating_points',
         'seller_rating_points',
     ];
@@ -25,5 +25,11 @@ class Trade extends Model
     public function tradeStatus()
     {
         return $this->belongsTo(TradeStatus::class);
+    }
+
+    // TradeとTradeMessageのリレーション
+    public function tradeMessages()
+    {
+        return $this->hasMany(TradeMessage::class);
     }
 }

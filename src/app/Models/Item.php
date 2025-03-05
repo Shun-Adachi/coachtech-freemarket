@@ -18,19 +18,19 @@ class Item extends Model
     ];
 
     //ItemとConditionのリレーション
-    public function Condition()
+    public function condition()
     {
         return $this->belongsTo(Condition::class);
     }
 
     //ItemとUserのリレーション
-    public function User()
+    public function user()
     {
         return $this->belongsTo(User::class);
     }
 
     //ItemとCategoryのリレーション
-    public function Category()
+    public function category()
     {
         return $this->belongsTo(Category::class);
     }

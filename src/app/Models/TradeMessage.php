@@ -13,6 +13,7 @@ class TradeMessage extends Model
         'user_id',
         'message',
         'image_path',
+        'is_read',
     ];
 
     //TradeMessageとTradeのリレーション
