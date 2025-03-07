@@ -18,7 +18,7 @@ class TradeMessageController extends Controller
         $user = Auth::user();
         $userId = $user->id;
 
-        // 取引情報取得
+        // 自身に関連する取引および商品情報取得
         $trade->load('purchase.item.user', 'purchase.user');
         $item = $trade->purchase->item;
         if ($trade->purchase->user->id == $userId) {
@@ -28,7 +28,7 @@ class TradeMessageController extends Controller
         }
         $item->price = number_format($item->price);
 
-        // 相手のメッセージを全て既読に更新（現在のユーザー以外）
+        // 相手のメッセージを全て既読に更新
         TradeMessage::where('trade_id', $trade->id)
             ->where('user_id', '!=', $userId)
             ->update(['is_read' => true]);
@@ -39,21 +39,25 @@ class TradeMessageController extends Controller
             ->orderBy('created_at', 'asc')
             ->get();
 
-        // 編集モード対象のメッセージIDとして取得
+        // 編集対象のメッセージを取得
         $editingMessageId = session('editingMessageId');
 
-        // 認証ユーザーが購入者または出品者として関与している取引のうち、
-        // 現在表示している取引を除く取引一覧を取得する
+        // 取引が自分に関係しているもので評価を入力していないものを表示
         $sidebarTrades = Trade::with(['purchase.item', 'tradeMessages'])
-            ->where('is_complete', false)
-            ->where(function ($query) use ($userId) {
-                $query->whereHas('purchase', function ($q) use ($userId) {
-                    $q->where('user_id', $userId);
-                })->orWhereHas('purchase.item', function ($q) use ($userId) {
-                    $q->where('user_id', $userId);
+            ->where('id', '!=',  $trade->id)
+            ->where(function($query) use ($userId) {
+                $query->where(function ($q) use ($userId) {
+                    // 自分が購入者の場合、buyer_rating_pointsがnull
+                    $q->whereHas('purchase', function ($q2) use ($userId) {
+                        $q2->where('user_id', $userId);
+                    })->whereNull('buyer_rating_points');
+                })->orWhere(function ($q) use ($userId) {
+                    // 自分が出品者の場合、seller_rating_pointsがnull
+                    $q->whereHas('purchase.item', function ($q2) use ($userId) {
+                        $q2->where('user_id', $userId);
+                    })->whereNull('seller_rating_points');
                 });
             })
-            ->where('id', '!=', $trade->id)
             ->get();
 
         return view('trade-chat', compact('trade','messages','sidebarTrades','item','tradePartner', 'editingMessageId'));

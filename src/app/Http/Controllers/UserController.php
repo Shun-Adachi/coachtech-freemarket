@@ -21,34 +21,19 @@ class UserController extends Controller
         $userId = $user->id ?? null;
         $tab = $request->tab;
 
+        // 取引が自分に関係しているもので評価を入力していないものを表示
         $trades = Trade::with(['purchase.item', 'tradeMessages'])
-            // 取引が自分に関係しているものに絞る
             ->where(function($query) use ($userId) {
-                $query->whereHas('purchase', function ($q) use ($userId) {
-                    $q->where('user_id', $userId);
-                })->orWhereHas('purchase.item', function ($q) use ($userId) {
-                    $q->where('user_id', $userId);
-                });
-            })
-            ->where(function ($query) use ($userId) {
-                // 取引が未完了の場合
-                $query->where('is_complete', false)
-                // 取引が完了しているが、自分が評価をしていない場合
-                ->orWhere(function ($query2) use ($userId) {
-                    $query2->where('is_complete', true)
-                        ->where(function ($query3) use ($userId) {
-                            $query3->where(function ($q) use ($userId) {
-                                // 自分が購入者の場合、buyer_rating_pointsがnull
-                                $q->whereHas('purchase', function ($q2) use ($userId) {
-                                    $q2->where('user_id', $userId);
-                                })->whereNull('buyer_rating_points');
-                            })->orWhere(function ($q) use ($userId) {
-                                // 自分が出品者の場合、seller_rating_pointsがnull
-                                $q->whereHas('purchase.item', function ($q2) use ($userId) {
-                                    $q2->where('user_id', $userId);
-                                })->whereNull('seller_rating_points');
-                            });
-                        });
+                $query->where(function ($q) use ($userId) {
+                    // 自分が購入者の場合、buyer_rating_pointsがnull
+                    $q->whereHas('purchase', function ($q2) use ($userId) {
+                        $q2->where('user_id', $userId);
+                    })->whereNull('buyer_rating_points');
+                })->orWhere(function ($q) use ($userId) {
+                    // 自分が出品者の場合、seller_rating_pointsがnull
+                    $q->whereHas('purchase.item', function ($q2) use ($userId) {
+                        $q2->where('user_id', $userId);
+                    })->whereNull('seller_rating_points');
                 });
             })
             ->get();
@@ -83,6 +68,8 @@ class UserController extends Controller
 
         // 未読メッセージの合計を取得
         $totalTradePartnerMessages = $items->sum('message_count');
+
+        // 新規メッセージが来た順に並べ替え
         $items = $items->sortByDesc(function ($item) {
             return $item->latest_partner_message_at ? $item->latest_partner_message_at->timestamp : 0;
         })->values();
@@ -97,7 +84,7 @@ class UserController extends Controller
             $items = Item::whereIn('id', $purchaseItemIds)->get();
         }
 
-        // 取引評価取得
+        // 自身に関わる取引取得
         $allTrades = Trade::with(['purchase.item', 'purchase.user'])
             ->where(function ($query) use ($userId) {
                 $query->whereHas('purchase', function ($q) use ($userId) {
@@ -108,7 +95,7 @@ class UserController extends Controller
             })
             ->get();
 
-        // 評価の数と合計値を取得
+        // 自分に対する評価の数と合計値を取得
         $totalRating = 0;
         $ratingCount = 0;
         foreach ($allTrades as $trade) {

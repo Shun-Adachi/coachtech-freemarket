@@ -112,19 +112,19 @@
                 <form
                   action="{{ url('/trades/' . $trade->id . '/messages/edit/' .  $message->id) }}"
                   method="POST"
-                  class="message-actions__delete-form">
+                  class="message-actions__form">
                   @csrf
                   @method('POST')
-                  <button type="submit" class="message-actions__edit-link">編集</button>
+                  <button type="submit" class="message-actions__button">編集</button>
                 </form>
                 <form
                   action="{{ url('/trades/' . $trade->id . '/messages/' .  $message->id) }}"
                   method="POST"
-                  class="message-actions__delete-form"
+                  class="message-actions__form"
                   onsubmit="return confirm('本当に削除しますか？');">
                   @csrf
                   @method('DELETE')
-                  <button type="submit" class="message-actions__delete-button">削除</button>
+                  <button type="submit" class="message-actions__button">削除</button>
                 </form>
               </div>
             @endif
@@ -182,9 +182,15 @@
           id="image"
           name="image"
           class="message-form__image--input">
-        <button type="submit" class="message-form__button">
-          <img class="message-form__button--image" src="{{ asset('images/input-message.png') }}" alt="送信">
-        </button>
+        @if($trade->is_complete)
+          <button type="submit" class="message-form__button--inactive">
+            <img class="message-form__button--image" src="{{ asset('images/input-message.png') }}" alt="送信">
+          </button>
+        @else
+          <button type="submit" class="message-form__button--active">
+            <img class="message-form__button--image" src="{{ asset('images/input-message.png') }}" alt="送信">
+          </button>
+        @endif
       </div>
     </form>
   </main>
@@ -254,8 +260,8 @@
     var textareas = document.querySelectorAll('textarea');
 
     function autoResize() {
-      this.style.height = 'auto'; // 高さをリセット
-      this.style.height = this.scrollHeight + 'px'; // 内容に合わせた高さに設定
+      this.style.height = 'auto';
+      this.style.height = this.scrollHeight + 'px';
     }
 
     // 各テキストエリアの初期リサイズと、入力イベントの登録
@@ -276,7 +282,7 @@
       var savedValue = localStorage.getItem('messageInput');
       if (savedValue !== null) {
         messageTextarea.value = savedValue;
-        autoResize.call(messageTextarea); // ローカルストレージの値をセット後、再調整
+        autoResize.call(messageTextarea);
       }
       messageTextarea.addEventListener('input', function() {
         localStorage.setItem('messageInput', messageTextarea.value);

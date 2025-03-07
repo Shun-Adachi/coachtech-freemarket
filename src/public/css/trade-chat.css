@@ -273,28 +273,14 @@
 
 .message-actions {
     margin-top: 0.5rem;
-}
-
-.message-actions__edit-link {
-    margin-left: 0.5rem;
-    margin-right: 0.5rem;
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: #5f5f5f;
-    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    font-family: Inter;
-    font-size: 15px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
-}
-
-.message-actions__delete-form {
     display: inline;
 }
 
-.message-actions__delete-button {
+.message-actions__form {
+    display: inline;
+}
+
+.message-actions__button {
     margin-left: 0.5rem;
     margin-right: 0.5rem;
     background: none;
@@ -349,15 +335,11 @@
     cursor: pointer;
 }
 
-.message-edit-form__image-input {
-    display: none;
-}
-
 .message-edit-form__submit {
+    padding: 0;
     background: none;
     border: none;
     cursor: pointer;
-    padding: 0;
 }
 
 .message-edit-form__submit--image {
@@ -427,14 +409,23 @@
     line-height: 40px;
     cursor: pointer;
 }
+
 .message-form__image--input {
     display: none;
 }
 
-.message-form__button {
+.message-form__button--active {
     background: none;
     border: none;
     cursor: pointer;
+    padding: 0;
+}
+
+.message-form__button--inactive {
+    background: none;
+    border: none;
+    cursor: not-allowed;
+    pointer-events: none;
     padding: 0;
 }
 
