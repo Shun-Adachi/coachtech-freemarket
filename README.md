@@ -1,11 +1,11 @@
-# coachtechフリマ
+# coachtech フリマ
 
 ## 概要
 
 このプロジェクトは、個人や小規模事業者が商品を簡単に売買できるオンラインフリーマーケットアプリケーションです。以下の機能を提供します。
 
 - **非会員ユーザー**: 商品リストの閲覧、商品の検索、商品詳細の閲覧
-- **会員ユーザー**: プロフィール編集、商品の出品、購入、コメント投稿、お気に入り機能
+- **会員ユーザー**: プロフィール編集、商品の出品、購入、コメント投稿、お気に入り機能、取引チャット機能
 
 ---
 
@@ -16,7 +16,7 @@
 - **フレームワーク**: Laravel 8.x
 - **プログラミング言語**: PHP 7.4.9
 - **データベース**: MySQL 8.0.26
-- **Webサーバー**: Nginx 1.21.1
+- **Web サーバー**: Nginx 1.21.1
 - **バージョン管理**: Git
 - **決済サービス**: Stripe
 - **メール検証環境**: MailHog（ログイン認証メールの確認に使用）
@@ -33,7 +33,7 @@ git clone git@github.com:Shun-Adachi/coachtech-free-market.git
 cd coachtech-free-market
 ```
 
-### 2. Dockerコンテナのビルドと起動
+### 2. Docker コンテナのビルドと起動
 
 ```bash
 docker-compose up -d --build
@@ -51,21 +51,15 @@ cp .env.example .env
 `.env` ファイルを編集して以下の内容を設定してください。
 
 ```env
-DB_HOST=mysql
-DB_DATABASE=laravel_db
-DB_USERNAME=laravel_user
-DB_PASSWORD=laravel_pass
-
 STRIPE_KEY=your_stripe_publishable_key # Stripeダッシュボードで確認した公開可能キーを設定
 STRIPE_SECRET=your_stripe_secret_key   # シークレットキーを設定
 ```
 
-- **Stripeキーの取得手順**
-  1. Stripeアカウントを作成
-     Stripe公式サイトにアクセスし、新しいアカウントを登録します。
-  2. APIキーを取得
-     Stripeダッシュボードの「開発者」→「APIキー」から、公開可能キーとシークレットキーを取得します。
-
+- **Stripe キーの取得手順**
+  1. Stripe アカウントを作成
+     Stripe 公式サイトにアクセスし、新しいアカウントを登録します。
+  2. API キーを取得
+     Stripe ダッシュボードの「開発者」→「API キー」から、公開可能キーとシークレットキーを取得します。
 
 ### 4. 初期セットアップ
 
@@ -79,7 +73,7 @@ php artisan storage:link
 
 ---
 
-## URL一覧
+## URL 一覧
 
 ### 開発環境
 
@@ -92,25 +86,25 @@ php artisan storage:link
 
 ## ダミーデータ一覧
 
- 詳細は[こちら](./dummy_data.md) を参照してください。
+詳細は[こちら](./dummy_data.md) を参照してください。
 
 ---
 
-## ER図
+## ER 図
 
-このプロジェクトのER図は以下の通りです。
+このプロジェクトの ER 図は以下の通りです。
 
 <img src="./diagram/ER/ER.png" alt="ER図" width="800">
 
 ---
 
-## PHPUnitを用いたテスト実行手順
+## PHPUnit を用いたテスト実行手順
 
 ### 1. テスト用データベースの作成
 
 ```bash
 docker-compose exec mysql bash
-# mysqlコンテナ内で以下を実行
+# mysqlコンテナ内で以下を実行(パスワードは”root”)
 mysql -u root -p
 
 # MySQLクライアントで以下を実行
@@ -126,8 +120,11 @@ FLUSH PRIVILEGES;
 ```env.testing
 APP_ENV=testing
 APP_KEY=
+
 DB_DATABASE=test
 ```
+
+Stripe キーも入力されていることを確認してください。
 
 ### 3. テスト用のアプリケーションキーを生成する
 
