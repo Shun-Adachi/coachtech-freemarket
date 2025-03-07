@@ -19,7 +19,7 @@
 - **Web サーバー**: Nginx 1.21.1
 - **バージョン管理**: Git
 - **決済サービス**: Stripe
-- **メール検証環境**: MailHog（ログイン認証メールの確認に使用）
+- **メール検証環境**: MailHog（ログイン認証メールと取引完了メールの確認使用）
 - **テスト環境**: PHPUnit
 
 ---
@@ -80,7 +80,7 @@ php artisan storage:link
 - 商品一覧画面: <http://localhost/>
 - 会員登録画面: <http://localhost/register>
 - ログイン画面: <http://localhost/login>
-- MailHog: <http://localhost:8025> （ログイン認証メール確認用）
+- MailHog: <http://localhost:8025>
 
 ---
 
